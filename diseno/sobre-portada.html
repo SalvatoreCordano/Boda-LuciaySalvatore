@@ -97,29 +97,56 @@
     height:auto;
   }
 
-  /* --- escena 2: sobre abierto / invitación --- */
+  /* --- escena 2: sobre abierto + contenido --- */
   #letterScene{
+    opacity:1;
+  }
+
+  /* lienzo de referencia 1440x1024, contenido dentro del frame sin deformarse */
+  .canvas{
+    position:relative;
+    aspect-ratio:1440/1024;
+    width:min(100%, 140.625vh);
+    height:min(100%, 71.111vw);
+  }
+
+  .card{
+    position:absolute;
+    display:block;
+    width:100%;
+    height:auto;
     opacity:0;
+    --rot:0deg;
+    transform-origin:top left;
+    transform:translateY(-18px) rotate(var(--rot));
   }
-  #letterScene.is-visible{
-    animation:revealLetter .7s cubic-bezier(.22,.61,.36,1) forwards;
+  .card.is-visible{
+    animation:revealCard .7s cubic-bezier(.22,.61,.36,1) forwards;
   }
-  @keyframes revealLetter{
-    from{ opacity:0; transform:translateY(-18px); }
-    to{ opacity:1; transform:translateY(0); }
+  @keyframes revealCard{
+    from{ opacity:0; transform:translateY(-18px) rotate(var(--rot)); }
+    to{ opacity:1; transform:translateY(0) rotate(var(--rot)); }
   }
   @media (prefers-reduced-motion: reduce){
     #envelopeScene{ transition:opacity .3s linear; }
-    #letterScene.is-visible{ animation:fadeOnly .3s linear forwards; }
-    @keyframes fadeOnly{ from{opacity:0;} to{opacity:1;} }
+    .card.is-visible{ animation:fadeOnly .3s linear forwards; }
+    @keyframes fadeOnly{ from{opacity:0;} to{opacity:1; transform:translateY(0) rotate(var(--rot));} }
   }
 
-  .letter-img{
-    display:block;
-    width:auto;
-    height:auto;
-    max-width:78%;
-    max-height:88%;
+  /* posiciones tomadas del lienzo de 1440x1024 pasado a % */
+  .card--sobre{
+    left:28.19%; top:9.77%; width:43.61%;
+  }
+  .card--recepcion{
+    left:37.92%; top:21.97%; width:22.57%;
+  }
+  .card--regalos{
+    left:29.58%; top:51.73%; width:20.83%;
+    --rot:-21deg;
+  }
+  .card--invitacion{
+    left:52.73%; top:38.57%; width:18.19%;
+    --rot:14deg;
   }
 
   .credit{
@@ -148,7 +175,12 @@
   </div>
 
   <div class="scene" id="letterScene" hidden>
-    <img class="letter-img" src="sobre-abierto.png" alt="Invitación con el sobre abierto" />
+    <div class="canvas">
+      <img class="card card--sobre" id="cardSobre" src="sobre-abierto.png" alt="Sobre abierto" />
+      <img class="card card--recepcion" id="cardRecepcion" src="recepcion-completa.png" alt="Tarjeta de recepción" />
+      <img class="card card--regalos" id="cardRegalos" src="regalos-completa.png" alt="Tarjeta de mesa de regalos" />
+      <img class="card card--invitacion" id="cardInvitacion" src="invitacion-completa.png" alt="Tarjeta de invitación con los nombres" />
+    </div>
   </div>
 
   <p class="credit">Lucía &amp; Salvatore — 28 de noviembre, 2026</p>
@@ -159,24 +191,42 @@
     var sealBtn = document.getElementById('sealBtn');
     var envelopeScene = document.getElementById('envelopeScene');
     var letterScene = document.getElementById('letterScene');
+    var cardSobre = document.getElementById('cardSobre');
+    var extraCards = [
+      document.getElementById('cardRecepcion'),
+      document.getElementById('cardRegalos'),
+      document.getElementById('cardInvitacion')
+    ];
     var opened = false;
+
+    function reveal(el){
+      void el.offsetWidth; // fuerza reflow para que la animación se dispare
+      el.classList.add('is-visible');
+    }
 
     sealBtn.addEventListener('click', function(){
       if(opened) return;
       opened = true;
 
-      envelopeScene.classList.add('is-hidden');
-
       var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var delay = reduced ? 250 : 400;
+      var envelopeFade = reduced ? 250 : 400;
+      var revealDuration = reduced ? 300 : 700;
+      var pauseBeforeContent = 500;
+      var stagger = 110;
+
+      envelopeScene.classList.add('is-hidden');
 
       setTimeout(function(){
         envelopeScene.hidden = true;
         letterScene.hidden = false;
-        // fuerza reflow antes de animar para que la transición se dispare
-        void letterScene.offsetWidth;
-        letterScene.classList.add('is-visible');
-      }, delay);
+        reveal(cardSobre);
+
+        setTimeout(function(){
+          extraCards.forEach(function(card, i){
+            setTimeout(function(){ reveal(card); }, i * stagger);
+          });
+        }, revealDuration + pauseBeforeContent);
+      }, envelopeFade);
     });
   })();
 </script>
