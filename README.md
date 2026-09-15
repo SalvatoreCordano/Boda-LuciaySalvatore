@@ -13,3 +13,7 @@ Web de la boda de Lucía Revollar Torres & Salvatore Cordano Alencastre — 28 d
 
 - `index.html` — página principal (sobre interactivo: fade in/out al abrir con el sello de lacre)
 - `assets/` — fotos del sobre, sello y tarjetas de la invitación
+
+## Deploy
+
+Sitio en vivo: https://bodaluciaysalvatore.vercel.app
