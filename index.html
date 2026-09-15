@@ -168,6 +168,27 @@
     letter-spacing:0.02em;
     pointer-events:none;
   }
+
+  /* --- mobile: el lienzo de 1440x1024 está pensado para escritorio y en
+     pantallas angostas deja al sobre chico con márgenes enormes a los
+     lados. Acá lo recortamos al área real que ocupa el sobre (que es
+     el elemento más grande) para que el conjunto llegue a ~20px de
+     los bordes en vez de quedar centrado con espacio vacío de sobra.
+     No toca nada de las reglas de escritorio de arriba. */
+  @media (max-width: 700px){
+    .envelope{
+      width:min(calc(100% - 40px), 420px);
+    }
+    .canvas{
+      aspect-ratio:628/824.2;
+      width:min(calc(100% - 40px), 480px);
+      height:auto;
+    }
+    .card--sobre{      left:0%;     top:0%;     width:100%;  }
+    .card--recepcion{  left:22.31%; top:15.16%; width:51.75%; }
+    .card--regalos{    left:3.19%;  top:52.13%; width:47.76%; }
+    .card--invitacion{ left:56.27%; top:35.78%; width:41.71%; }
+  }
 </style>
 </head>
 <body>
