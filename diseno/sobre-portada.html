@@ -5,26 +5,17 @@
     --cream-deep:#e3dabf;
   }
   *{box-sizing:border-box;}
+  html, body{
+    height:100%;
+  }
   body{
     margin:0;
     background:var(--cream);
-    min-height:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding-block:48px;
-  }
-  .stage{
-    width:100%;
-    max-width:920px;
-    padding-inline:16px;
   }
   .frame{
     position:relative;
     width:100%;
-    aspect-ratio:4/3;
-    max-height:88vh;
-    margin:0 auto;
+    height:100%;
     overflow:hidden;
     background:var(--cream);
   }
@@ -82,23 +73,24 @@
   }
 
   .credit{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:max(24px, env(safe-area-inset-bottom, 0px) + 12px);
     text-align:center;
-    margin-top:18px;
     font:italic 13px/1.4 Georgia, serif;
     color:#71755d;
     letter-spacing:0.02em;
   }
 </style>
 
-<div class="stage">
-  <div class="frame">
-    <div class="paper"></div>
-    <div class="scene">
-      <div class="envelope">
-        <img src="sobre-cerrado.png" alt="Sobre cerrado" />
-        <div class="seal">
-          <img src="sello-lacre.png" alt="Sello de lacre" />
-        </div>
+<div class="frame">
+  <div class="paper"></div>
+  <div class="scene">
+    <div class="envelope">
+      <img src="sobre-cerrado.png" alt="Sobre cerrado" />
+      <div class="seal">
+        <img src="sello-lacre.png" alt="Sello de lacre" />
       </div>
     </div>
   </div>
