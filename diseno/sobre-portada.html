@@ -48,7 +48,15 @@
     justify-content:center;
   }
 
-  /* el sobre real, con el sello real superpuesto en la punta de la solapa */
+  /* --- escena 1: sobre cerrado --- */
+  #envelopeScene{
+    transition:opacity .45s ease;
+  }
+  #envelopeScene.is-hidden{
+    opacity:0;
+    pointer-events:none;
+  }
+
   .envelope{
     position:relative;
     width:62%;
@@ -59,17 +67,59 @@
     width:100%;
     height:auto;
   }
+
   .seal{
     position:absolute;
     left:50%;
     top:71.3%;
     width:22.4%;
     transform:translate(-50%,-50%);
+    padding:0;
+    border:0;
+    background:none;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:transform .2s ease, filter .2s ease;
+  }
+  .seal:hover,
+  .seal:focus-visible{
+    transform:translate(-50%,-50%) scale(1.06);
+    filter:drop-shadow(0 3px 8px rgba(92,70,20,0.35));
+  }
+  .seal:focus-visible{
+    outline:2px solid #71755d;
+    outline-offset:4px;
+    border-radius:50%;
   }
   .seal img{
     display:block;
     width:100%;
     height:auto;
+  }
+
+  /* --- escena 2: sobre abierto / invitación --- */
+  #letterScene{
+    opacity:0;
+  }
+  #letterScene.is-visible{
+    animation:revealLetter .7s cubic-bezier(.22,.61,.36,1) forwards;
+  }
+  @keyframes revealLetter{
+    from{ opacity:0; transform:translateY(-18px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    #envelopeScene{ transition:opacity .3s linear; }
+    #letterScene.is-visible{ animation:fadeOnly .3s linear forwards; }
+    @keyframes fadeOnly{ from{opacity:0;} to{opacity:1;} }
+  }
+
+  .letter-img{
+    display:block;
+    width:auto;
+    height:auto;
+    max-width:78%;
+    max-height:88%;
   }
 
   .credit{
@@ -81,18 +131,52 @@
     font:italic 13px/1.4 Georgia, serif;
     color:#71755d;
     letter-spacing:0.02em;
+    pointer-events:none;
   }
 </style>
 
 <div class="frame">
   <div class="paper"></div>
-  <div class="scene">
+
+  <div class="scene" id="envelopeScene">
     <div class="envelope">
       <img src="sobre-cerrado.png" alt="Sobre cerrado" />
-      <div class="seal">
-        <img src="sello-lacre.png" alt="Sello de lacre" />
-      </div>
+      <button class="seal" id="sealBtn" type="button" aria-label="Abrir la invitación">
+        <img src="sello-lacre.png" alt="" />
+      </button>
     </div>
   </div>
+
+  <div class="scene" id="letterScene" hidden>
+    <img class="letter-img" src="sobre-abierto.png" alt="Invitación con el sobre abierto" />
+  </div>
+
   <p class="credit">Lucía &amp; Salvatore — 28 de noviembre, 2026</p>
 </div>
+
+<script>
+  (function(){
+    var sealBtn = document.getElementById('sealBtn');
+    var envelopeScene = document.getElementById('envelopeScene');
+    var letterScene = document.getElementById('letterScene');
+    var opened = false;
+
+    sealBtn.addEventListener('click', function(){
+      if(opened) return;
+      opened = true;
+
+      envelopeScene.classList.add('is-hidden');
+
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var delay = reduced ? 250 : 400;
+
+      setTimeout(function(){
+        envelopeScene.hidden = true;
+        letterScene.hidden = false;
+        // fuerza reflow antes de animar para que la transición se dispare
+        void letterScene.offsetWidth;
+        letterScene.classList.add('is-visible');
+      }, delay);
+    });
+  })();
+</script>
