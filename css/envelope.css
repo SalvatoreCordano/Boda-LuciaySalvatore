@@ -1,0 +1,215 @@
+/* Página del sobre interactivo (index.html) */
+
+.frame{
+  position:relative;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:var(--cream);
+}
+
+/* fondo: papel crema con textura de fibra, sin fotos externas */
+.paper{
+  position:absolute;
+  inset:0;
+}
+.paper::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(ellipse 120% 90% at 50% 45%, var(--cream) 0%, var(--cream) 55%, var(--cream-deep) 100%);
+}
+.paper::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  opacity:0.6;
+  mix-blend-mode:multiply;
+  background-image:var(--paper-fiber), var(--paper-grain);
+  background-size:480px 480px, 220px 220px;
+  background-blend-mode:multiply;
+}
+
+.scene{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.scene[hidden]{
+  display:none;
+}
+
+/* lienzo de referencia 1440x1024 compartido por las dos escenas, para
+   que el sobre cerrado y el sobre abierto midan y se ubiquen de forma
+   consistente sin importar el tamaño de pantalla */
+.canvas{
+  position:relative;
+  aspect-ratio:1440/1024;
+  width:min(100%, 140.625vh);
+  height:min(100%, 71.111vw);
+}
+
+/* --- escena 1: sobre cerrado --- */
+#envelopeScene{
+  transition:opacity .45s ease;
+}
+#envelopeScene.is-hidden{
+  opacity:0;
+  pointer-events:none;
+}
+
+.envelope{
+  position:absolute;
+  left:27.57%; top:25.68%; width:44.93%;
+}
+.envelope img{
+  display:block;
+  width:100%;
+  height:auto;
+}
+
+/* posición del sello relativa al propio sobre, para que se mantenga
+   centrado sobre la solapa en cualquier tamaño de pantalla */
+.seal{
+  position:absolute;
+  left:38.64%; top:54.31%; width:22.41%;
+  padding:0;
+  border:0;
+  background:none;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .2s ease, filter .2s ease;
+}
+.seal:hover,
+.seal:focus-visible{
+  transform:scale(1.06);
+  filter:drop-shadow(0 3px 8px rgba(92,70,20,0.35));
+}
+.seal:focus-visible{
+  outline:2px solid #71755d;
+  outline-offset:4px;
+  border-radius:50%;
+}
+.seal img{
+  display:block;
+  width:100%;
+  height:auto;
+}
+
+/* --- escena 2: sobre abierto + contenido --- */
+#letterScene{
+  opacity:1;
+}
+
+.card{
+  position:absolute;
+  display:block;
+  width:100%;
+  height:auto;
+  opacity:0;
+  --rot:0deg;
+  transform-origin:top left;
+  transform:translateY(-18px) rotate(var(--rot));
+}
+.card.is-visible{
+  animation:revealCard .7s cubic-bezier(.22,.61,.36,1) forwards;
+}
+@keyframes revealCard{
+  from{ opacity:0; transform:translateY(-18px) rotate(var(--rot)); }
+  to{ opacity:1; transform:translateY(0) rotate(var(--rot)); }
+}
+@media (prefers-reduced-motion: reduce){
+  #envelopeScene{ transition:opacity .3s linear; }
+  .card.is-visible{ animation:fadeOnly .3s linear forwards; }
+  @keyframes fadeOnly{
+    from{ opacity:0; }
+    to{ opacity:1; transform:translateY(0) rotate(var(--rot)); }
+  }
+}
+
+/* posiciones tomadas del lienzo de referencia 1440x1024, pasadas a % */
+.card--sobre{
+  left:27.57%; top:8.59%; width:44.93%;
+}
+.card--recepcion{
+  left:40.56%; top:26.37%; width:18.89%;
+}
+.card--regalos{
+  left:25.28%; top:52.00%; width:22.57%;
+  --rot:-25deg;
+}
+.card--invitacion{
+  left:51.69%; top:42.97%; width:20.46%;
+  --rot:14deg;
+}
+
+.bottom-stack{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:max(24px, env(safe-area-inset-bottom, 0px) + 12px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+}
+
+.credit{
+  text-align:center;
+  font:italic 13px/1.4 Georgia, serif;
+  color:#71755d;
+  letter-spacing:0.02em;
+  pointer-events:none;
+  margin:0;
+}
+
+/* aparece recién cuando termina de revelarse toda la invitación */
+.more-link{
+  opacity:0;
+  transform:translateY(10px);
+  pointer-events:none;
+  text-decoration:none;
+  color:#5c5c46;
+  font:600 12px/1 "Georgia", serif;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  padding:0.05em 0 0.35em;
+  border-bottom:1px solid #8a8e75;
+  transition:color .2s ease, border-color .2s ease;
+}
+.more-link:hover,
+.more-link:focus-visible{
+  color:#3f4231;
+  border-color:#5f6249;
+}
+.more-link.is-visible{
+  animation:moreIn .7s cubic-bezier(.22,.61,.36,1) forwards;
+  pointer-events:auto;
+}
+@keyframes moreIn{
+  to{ opacity:1; transform:translateY(0); }
+}
+@media (prefers-reduced-motion: reduce){
+  .more-link.is-visible{ animation:none; opacity:1; transform:none; }
+}
+
+/* --- mobile: el lienzo de 1440x1024 está pensado para escritorio y en
+   pantallas angostas deja al sobre chico con márgenes enormes a los
+   lados. Acá lo recortamos al área real que ocupa el sobre (que es
+   el elemento más grande) para que el conjunto llegue a ~20px de
+   los bordes en vez de quedar centrado con espacio vacío de sobra.
+   No toca nada de las reglas de escritorio de arriba. */
+@media (max-width: 700px){
+  .canvas{
+    aspect-ratio:628/824.2;
+    width:min(calc(100% - 40px), 480px);
+    height:auto;
+  }
+  .envelope,
+  .card--sobre{      left:0%;     top:0%;     width:100%;  }
+  .card--recepcion{  left:27.48%; top:19.89%; width:41.40%; }
+  .card--regalos{    left:3.19%;  top:52.13%; width:47.76%; }
+  .card--invitacion{ left:56.27%; top:35.78%; width:41.71%; }
+}

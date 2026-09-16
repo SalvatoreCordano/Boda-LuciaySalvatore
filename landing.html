@@ -7,401 +7,8 @@
 <script>document.documentElement.classList.add('js');</script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --cream:#f1ead8;
-    --cream-deep:#e3dabf;
-    --ink:#5f6249;
-    --olive:#7c7f62;
-    --olive-deep:#54573f;
-    --sage:#bec5a4;
-    --gold:#cec4a0;
-  }
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    margin:0;
-    background:var(--cream);
-    color:var(--ink);
-    font-family:"Cormorant Garamond","Iowan Old Style",Georgia,serif;
-    -webkit-font-smoothing:antialiased;
-  }
-  img{max-width:100%;display:block;}
-
-  /* textura de papel reutilizada de la invitación */
-  .paper-bg{
-    position:fixed;
-    inset:0;
-    z-index:-1;
-    background:radial-gradient(ellipse 120% 70% at 50% 0%, var(--cream) 0%, var(--cream) 60%, var(--cream-deep) 100%);
-  }
-  .paper-bg::after{
-    content:"";
-    position:absolute; inset:0;
-    opacity:.5;
-    mix-blend-mode:multiply;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch' result='t'/><feColorMatrix in='t' type='matrix' values='0 0 0 0 0.85  0 0 0 0 0.82  0 0 0 0 0.72  0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-    background-size:220px 220px;
-  }
-
-  a{ color:inherit; }
-
-  .backlink{
-    position:fixed;
-    top:20px; left:20px;
-    z-index:10;
-    font-size:.72rem;
-    letter-spacing:.16em;
-    text-transform:uppercase;
-    text-decoration:none;
-    color:var(--olive);
-    background:rgba(241,234,216,.85);
-    backdrop-filter:blur(3px);
-    padding:.5em .9em;
-    border:1px solid var(--sage);
-    border-radius:999px;
-    transition:color .2s ease, border-color .2s ease;
-  }
-  .backlink:hover, .backlink:focus-visible{ color:var(--ink); border-color:var(--olive); }
-
-  /* ---------- estructura de sección reutilizable ---------- */
-  .section{
-    padding-block:clamp(3.2rem, 8vw, 5.5rem);
-  }
-  .section--alt{ background:var(--cream-deep); }
-  .section-inner{
-    max-width:1080px;
-    margin:0 auto;
-    padding-inline:20px;
-  }
-  .eyebrow{
-    display:block;
-    text-align:center;
-    font-size:.7rem;
-    letter-spacing:.32em;
-    text-transform:uppercase;
-    color:var(--olive);
-    margin:0 0 .9rem;
-  }
-  .heading{
-    text-align:center;
-    font-weight:600;
-    font-size:clamp(1.9rem, 4.4vw, 2.7rem);
-    letter-spacing:.05em;
-    text-transform:uppercase;
-    margin:0;
-    text-wrap:balance;
-  }
-  .script{
-    font-family:"Pinyon Script",cursive;
-    font-weight:400;
-    text-transform:none;
-    letter-spacing:0;
-  }
-  .divider{
-    width:64px; height:1px;
-    background:var(--sage);
-    margin:1.4rem auto;
-  }
-  .lede{
-    max-width:520px;
-    margin:0 auto;
-    text-align:center;
-    font-size:1.15rem;
-    line-height:1.7;
-    color:var(--olive-deep);
-  }
-
-  /* sin JS (o si falla), el contenido queda visible de una: la clase
-     .js sólo la agrega el script, así que el estado oculto depende de ella */
-  .js .reveal{
-    opacity:0;
-    transform:translateY(22px);
-    transition:opacity .8s cubic-bezier(.22,.61,.36,1), transform .8s cubic-bezier(.22,.61,.36,1);
-  }
-  .reveal.is-visible{ opacity:1; transform:translateY(0); }
-  @media (prefers-reduced-motion: reduce){
-    .reveal{ transition:none; opacity:1; transform:none; }
-    html{ scroll-behavior:auto; }
-  }
-
-  /* ---------- hero: video enmarcado ---------- */
-  .hero{
-    padding:20px;
-  }
-  .hero-frame{
-    position:relative;
-    max-width:1200px;
-    margin:0 auto;
-    aspect-ratio:16/9;
-    border:20px solid var(--cream);
-    outline:1px solid var(--sage);
-    outline-offset:-1px;
-    border-radius:4px;
-    overflow:hidden;
-    background:
-      radial-gradient(ellipse 90% 70% at 30% 20%, #767a5c 0%, transparent 60%),
-      linear-gradient(160deg, #6b6e51 0%, #4d503a 65%, #3f4231 100%);
-    box-shadow:0 24px 50px -20px rgba(45,45,30,.45);
-  }
-  .hero-frame::before{
-    content:"";
-    position:absolute; inset:0;
-    opacity:.18;
-    mix-blend-mode:overlay;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch' result='t'/><feColorMatrix in='t' type='matrix' values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-    background-size:220px 220px;
-    animation:grain 1.2s steps(2) infinite;
-  }
-  @keyframes grain{ 50%{ transform:translate(-1%,1%); } }
-
-  .hero-content{
-    position:absolute; inset:0;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:1.1rem;
-    color:#f4efe1;
-    text-align:center;
-    padding:20px;
-  }
-  .hero-names{
-    font-size:.72rem;
-    letter-spacing:.34em;
-    text-transform:uppercase;
-    opacity:.85;
-  }
-  .play-btn{
-    width:clamp(56px,8vw,76px);
-    height:clamp(56px,8vw,76px);
-    border-radius:50%;
-    border:1.5px solid rgba(244,239,225,.75);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    position:relative;
-    cursor:pointer;
-    background:rgba(244,239,225,.08);
-    transition:transform .25s ease, background .25s ease;
-  }
-  .play-btn:hover, .play-btn:focus-visible{
-    transform:scale(1.06);
-    background:rgba(244,239,225,.16);
-  }
-  .play-btn::after{
-    content:"";
-    position:absolute; inset:-14px;
-    border-radius:50%;
-    border:1px solid rgba(244,239,225,.35);
-    animation:pulseRing 2.6s ease-out infinite;
-  }
-  @keyframes pulseRing{
-    0%{ transform:scale(.85); opacity:.7; }
-    100%{ transform:scale(1.25); opacity:0; }
-  }
-  .play-btn svg{ width:34%; height:34%; fill:#f4efe1; margin-left:3px; }
-  .hero-caption{
-    font-family:"Pinyon Script",cursive;
-    font-size:clamp(1.8rem,4vw,2.4rem);
-  }
-  .hero-tag{
-    font-size:.66rem;
-    letter-spacing:.24em;
-    text-transform:uppercase;
-    opacity:.65;
-  }
-  @media (prefers-reduced-motion: reduce){
-    .hero-frame::before{ animation:none; }
-    .play-btn::after{ animation:none; }
-  }
-
-  /* ---------- invitación ---------- */
-  .names-stack{ text-align:center; }
-  .given{
-    font-weight:600;
-    font-size:clamp(1.7rem, 5.4vw, 2.3rem);
-    letter-spacing:.13em;
-    text-transform:uppercase;
-    margin:0;
-    line-height:1.05;
-  }
-  .surname{
-    font-family:"Pinyon Script",cursive;
-    font-size:clamp(2rem, 6.6vw, 2.7rem);
-    color:var(--olive);
-    margin:-.1em 0 0;
-  }
-  .amp{
-    font-family:"Pinyon Script",cursive;
-    font-size:clamp(1.7rem, 4.6vw, 2.1rem);
-    margin:.35rem 0;
-    display:block;
-  }
-  .datebox{
-    margin-top:1.6rem;
-    font-size:.82rem;
-    letter-spacing:.22em;
-    text-transform:uppercase;
-    color:var(--olive);
-    line-height:1.9;
-  }
-  .datebox b{ color:var(--ink); font-weight:600; }
-
-  /* ---------- filas imagen + texto ---------- */
-  .split{
-    display:grid;
-    grid-template-columns:minmax(0,0.85fr) minmax(0,1fr);
-    gap:clamp(1.8rem, 5vw, 3.6rem);
-    align-items:center;
-  }
-  .split--reverse .split-media{ order:2; }
-  .split-media{
-    position:relative;
-  }
-  .split-media img{
-    width:100%;
-    border-radius:2px;
-  }
-  .split-text{ }
-  .split-text .eyebrow, .split-text .heading{ text-align:left; }
-  .split-text .divider{ margin-left:0; }
-  .split-text p{
-    font-size:1.08rem;
-    line-height:1.75;
-    color:var(--olive-deep);
-    margin:0 0 1rem;
-  }
-  .detail-list{
-    list-style:none;
-    margin:1.4rem 0 0;
-    padding:0;
-    display:grid;
-    gap:.55rem;
-    font-size:.85rem;
-    letter-spacing:.06em;
-    text-transform:uppercase;
-    color:var(--ink);
-  }
-  .detail-list li{
-    display:flex;
-    gap:.6em;
-  }
-  .detail-list b{ min-width:8.5em; color:var(--olive); font-weight:600; }
-
-  @media (max-width:760px){
-    .split, .split--reverse .split-media{ order:0; }
-    .split{ grid-template-columns:1fr; }
-    .split-text .eyebrow, .split-text .heading{ text-align:center; }
-    .split-text .divider{ margin-inline:auto; }
-    .split-text p{ text-align:center; }
-    .detail-list{ justify-items:center; }
-    .detail-list li{ flex-direction:column; align-items:center; gap:.15em; }
-    .detail-list b{ min-width:0; }
-  }
-
-  /* ---------- ubicación ---------- */
-  .map-card{
-    display:grid;
-    grid-template-columns:1.1fr 1fr;
-    gap:clamp(1.6rem,4vw,3rem);
-    align-items:center;
-    background:var(--cream);
-    border:1px solid var(--sage);
-    border-radius:6px;
-    padding:clamp(1.6rem, 4vw, 2.6rem);
-  }
-  .map-illustration{
-    aspect-ratio:4/3;
-    border-radius:4px;
-    overflow:hidden;
-    background:var(--cream-deep);
-  }
-  .map-illustration svg{ width:100%; height:100%; display:block; }
-  .map-text{ text-align:left; }
-  .map-text .eyebrow{ text-align:left; }
-  .map-address{
-    font-size:1.3rem;
-    line-height:1.5;
-    margin:.6rem 0 1.6rem;
-  }
-  .cta-btn{
-    display:inline-flex;
-    align-items:center;
-    gap:.6em;
-    padding:.85em 1.6em;
-    background:var(--olive);
-    color:var(--cream);
-    text-decoration:none;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    font-size:.78rem;
-    border-radius:999px;
-    transition:background .2s ease, transform .2s ease;
-  }
-  .cta-btn:hover, .cta-btn:focus-visible{ background:var(--olive-deep); transform:translateY(-1px); }
-  .cta-btn svg{ width:1em; height:1em; fill:currentColor; }
-
-  @media (max-width:760px){
-    .map-card{ grid-template-columns:1fr; }
-    .map-text{ text-align:center; }
-    .map-text .eyebrow{ text-align:center; }
-    .cta-btn{ margin-inline:auto; }
-  }
-
-  /* ---------- galería ---------- */
-  .gallery{
-    display:grid;
-    grid-template-columns:repeat(3, 1fr);
-    gap:12px;
-  }
-  .gallery-tile{
-    position:relative;
-    aspect-ratio:1;
-    border-radius:3px;
-    overflow:hidden;
-    background:linear-gradient(150deg, var(--sage) 0%, var(--gold) 100%);
-  }
-  .gallery-tile:nth-child(3n+2){ background:linear-gradient(150deg, var(--gold) 0%, var(--cream-deep) 100%); }
-  .gallery-tile:nth-child(3n){ background:linear-gradient(150deg, var(--olive) 0%, var(--sage) 100%); }
-  .gallery-tile::before{
-    content:"";
-    position:absolute; inset:0;
-    opacity:.35;
-    mix-blend-mode:multiply;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch' result='t'/><feColorMatrix in='t' type='matrix' values='0 0 0 0 0.3  0 0 0 0 0.28  0 0 0 0 0.2  0 0 0 0.4 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-    background-size:220px 220px;
-  }
-  .gallery-tile span{
-    position:absolute; inset:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:rgba(255,255,255,.85);
-    font-size:.68rem;
-    letter-spacing:.2em;
-    text-transform:uppercase;
-  }
-  .gallery-tile svg{ width:22px; height:22px; opacity:.7; }
-  .gallery-note{
-    text-align:center;
-    margin-top:1.4rem;
-    font-size:.8rem;
-    color:var(--olive);
-    letter-spacing:.06em;
-  }
-  @media (max-width:600px){
-    .gallery{ grid-template-columns:repeat(2, 1fr); }
-  }
-
-  .foot{
-    text-align:center;
-    padding:2.4rem 20px calc(2.4rem + env(safe-area-inset-bottom, 0px));
-    font-style:italic;
-    font-size:.85rem;
-    color:var(--olive);
-  }
-</style>
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/landing.css" />
 </head>
 <body>
 
@@ -409,75 +16,167 @@
 
 <a class="backlink" href="index.html">← Volver al sobre</a>
 
-<!-- HERO: video enmarcado, 20px de margen y 20px de borde -->
-<section class="hero">
-  <div class="hero-frame">
-    <div class="hero-content">
-      <p class="hero-names">Lucía Revollar &amp; Salvatore Cordano</p>
-      <button class="play-btn" type="button" aria-label="Reproducir video">
-        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-      </button>
-      <p class="hero-caption">Nuestra historia</p>
-      <p class="hero-tag">Video · próximamente</p>
-    </div>
-  </div>
-</section>
-
 <!-- LA INVITACIÓN -->
 <section class="section" id="invitacion">
-  <div class="section-inner reveal">
+  <div class="section-inner reveal names-stack">
     <span class="eyebrow">Con inmenso amor, los invitamos a celebrar</span>
-    <div class="names-stack">
+    <div class="names-block">
       <p class="given">Lucía</p>
       <p class="surname">Revollar Torres</p>
       <span class="amp">&amp;</span>
       <p class="given">Salvatore</p>
       <p class="surname">Cordano Alencastre</p>
-      <p class="datebox"><b>Sábado 28 de noviembre, 2026</b><br>03:30 p. m. · Cieneguilla, Lima</p>
+    </div>
+    <p class="datebox"><span>Sábado 28 de noviembre, 2026</span><span>3:30 p.&nbsp;m.</span><span>Av. Nueva Toledo 122, Cieneguilla</span></p>
+  </div>
+</section>
+
+<!-- FOTO A SANGRE -->
+<section class="section-photo reveal">
+  <img src="assets/fotos/foto-15.webp" alt="Lucía y Salvatore en la playa" loading="lazy" />
+</section>
+
+
+<!-- CONFIRMACIÓN DE ASISTENCIA -->
+<section class="section" id="rsvp">
+
+  <section class="section section-monogram">
+    <div class="monogram reveal">
+      <span class="monogram-line"></span>
+      <img src="assets/Logo.svg" alt="Lucía &amp; Salvatore" class="monogram-logo" />
+      <span class="monogram-line"></span>
+    </div>
+  </section>
+
+  <div class="section-inner rsvp reveal">
+    <p class="rsvp-thanks">Gracias por formar parte de nuestras vidas, hoy queremos que seas testigo del inicio de nuestra vida juntos.</p>
+
+    <!-- TODO: "Rodrigo Zimmerman" y "1 pase" son de ejemplo. Falta definir
+         la lógica para personalizar estos datos por invitado. -->
+    <div class="rsvp-guest">
+      <p class="rsvp-guest-name">Rodrigo Zimmerman</p>
+      <p class="rsvp-guest-label">Hemos reservado</p>
+      <p class="rsvp-guest-passes">1 pase</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="rsvp-confirm-group">
+      <div class="rsvp-confirm">
+        <p>Por favor, confirmar su asistencia al:</p>
+        <p><b>+51 994 005 596 - Kathy Espath WP</b></p>
+      </div>
+      <a class="btn-outline" href="https://wa.me/51994005596?text=Hola%20Kathy%2C%20te%20escribo%20por%20la%20boda%20de%20Luc%C3%ADa%20y%20Salvatore." target="_blank" rel="noopener">Confirmar asistencia</a>
     </div>
   </div>
 </section>
 
 <!-- RECEPCIÓN -->
-<section class="section section--alt" id="recepcion">
+<section class="section section-olive" id="recepcion">
   <div class="section-inner">
+    <h2 class="heading heading--script section-title reveal">Celebremos juntos</h2>
     <div class="split reveal">
-      <div class="split-media">
-        <img src="assets/recepcion-completa.webp" alt="Tarjeta de recepción" />
-      </div>
       <div class="split-text">
-        <span class="eyebrow">Después de la ceremonia</span>
-        <h2 class="heading">Recepción</h2>
-        <div class="divider"></div>
-        <p>Los esperamos para seguir celebrando con nosotros: una tarde entre buena mesa, música y mucho cariño.</p>
-        <ul class="detail-list">
-          <li><b>Código de vestimenta</b> Elegante</li>
-          <li><b>Hombres</b> Terno y corbata</li>
-          <li><b>Mujeres</b> Vestido largo</li>
-        </ul>
+        <p>Luego de la ceremonia, te invitamos a celebrar con nosotros.</p>
+        <div class="divider divider--light"></div>
+        <p class="dresscode-label">Código de vestimenta</p>
+        <div class="dresscode-cols">
+          <div><b>Hombres</b><span>Terno y corbata</span></div>
+          <span class="ring-dot ring-dot--light" aria-hidden="true"></span>
+          <div><b>Mujeres</b><span>Vestido largo</span></div>
+        </div>
+        <div class="divider divider--light"></div>
+        <p>Agradecemos evitar colores como blanco, beige o similares.</p>
+      </div>
+      <div class="split-media">
+        <div class="card-plaque">
+          <img src="assets/recepcion-vacia.webp" alt="" />
+          <span class="card-plaque-title">Recepción</span>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- REGALOS -->
-<section class="section" id="regalos">
+<section class="section section-gold" id="regalos">
   <div class="section-inner">
-    <div class="split split--reverse reveal">
+    <div class="section-title-group reveal">
+      <h2 class="heading heading--script section-title">Mesa de regalos</h2>
+      <p>Nuestro mayor regalo es tu presencia en el día más especial de nuestras vidas, pero si deseas realizarnos un obsequio lo puedes hacer a través de:</p>
+    </div>
+    <div class="split reveal">
       <div class="split-media">
-        <img src="assets/regalos-completa.webp" alt="Tarjeta de mesa de regalos" />
+        <div class="gracias-badge">
+          <img class="gracias-oval" src="assets/regalos-vacia.webp" alt="" />
+          <span class="card-plaque-title card-plaque-title--gracias">Gracias</span>
+          <img class="gracias-photo gracias-photo--1" src="assets/fotos/foto-16.webp" alt="Lucía y Salvatore" loading="lazy" />
+          <img class="gracias-photo gracias-photo--2" src="assets/fotos/foto-11.webp" alt="Lucía y Salvatore" loading="lazy" />
+        </div>
       </div>
       <div class="split-text">
-        <span class="eyebrow">Con cariño</span>
-        <h2 class="heading">Regalos</h2>
+        <div class="bank-details">
+          <div class="bank-group">
+            <p class="bank-group-title">BCP - Banco de crédito - soles</p>
+            <div class="bank-entry">
+              <span class="bank-entry-label">Cuenta</span>
+              <p class="bank-entry-number">194-95627914-0-50</p>
+              <button class="copy-btn" type="button" data-copy="194-95627914-0-50" aria-label="Copiar número de cuenta en soles">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 00-2 2v14h2V3h12V1zm3 4H8a2 2 0 00-2 2v14a2 2 0 002 2h11a2 2 0 002-2V7a2 2 0 00-2-2zm0 16H8V7h11v14z"/></svg>
+                Copiar
+              </button>
+            </div>
+            <div class="bank-entry">
+              <span class="bank-entry-label">CCI</span>
+              <p class="bank-entry-number">002-194-195627914050-95</p>
+              <button class="copy-btn" type="button" data-copy="002-194-195627914050-95" aria-label="Copiar CCI en soles">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 00-2 2v14h2V3h12V1zm3 4H8a2 2 0 00-2 2v14a2 2 0 002 2h11a2 2 0 002-2V7a2 2 0 00-2-2zm0 16H8V7h11v14z"/></svg>
+                Copiar
+              </button>
+            </div>
+          </div>
+          <span class="ring-dot" aria-hidden="true"></span>
+          <div class="bank-group">
+            <p class="bank-group-title">BCP - Banco de crédito - dólares</p>
+            <div class="bank-entry">
+              <span class="bank-entry-label">Cuenta</span>
+              <p class="bank-entry-number">191-94439523-1-55</p>
+              <button class="copy-btn" type="button" data-copy="191-94439523-1-55" aria-label="Copiar número de cuenta en dólares">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 00-2 2v14h2V3h12V1zm3 4H8a2 2 0 00-2 2v14a2 2 0 002 2h11a2 2 0 002-2V7a2 2 0 00-2-2zm0 16H8V7h11v14z"/></svg>
+                Copiar
+              </button>
+            </div>
+            <div class="bank-entry">
+              <span class="bank-entry-label">CCI</span>
+              <p class="bank-entry-number">002-191-194439523155-56</p>
+              <button class="copy-btn" type="button" data-copy="002-191-194439523155-56" aria-label="Copiar CCI en dólares">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 00-2 2v14h2V3h12V1zm3 4H8a2 2 0 00-2 2v14a2 2 0 002 2h11a2 2 0 002-2V7a2 2 0 00-2-2zm0 16H8V7h11v14z"/></svg>
+                Copiar
+              </button>
+            </div>
+          </div>
+        </div>
         <div class="divider"></div>
-        <p>Nuestro mayor regalo es tu presencia. Si aun así deseas obsequiarnos algo, lo puedes hacer a través de:</p>
-        <ul class="detail-list">
-          <li><b>Cuenta soles</b> Próximamente</li>
-          <li><b>Cuenta dólares</b> Próximamente</li>
-          <li><b>Mesa de regalos</b> Próximamente</li>
-        </ul>
+        <p>O a través de nuestra mesa de novios: <a class="registry-link" href="https://sinenvolturas.com/salvatorelucia/regalos/" target="_blank" rel="noopener">sinenvolturas.com/salvatorelucia/regalos/</a></p>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- CUENTA REGRESIVA -->
+<section class="section section-dark" id="cuenta-regresiva">
+  <div class="section-inner countdown-inner reveal">
+    <span class="eyebrow eyebrow--light">Reserva la fecha</span>
+    <p class="countdown-date">28 nov 2026</p>
+    <p class="countdown-sub">Estamos muy emocionados de compartir juntos este día. Falta solo:</p>
+    <div class="countdown-group">
+      <div class="divider divider--light"></div>
+      <div class="countdown">
+        <div class="countdown-unit"><span id="cdDays">00</span><label>Días</label></div>
+        <div class="countdown-unit"><span id="cdHours">00</span><label>Horas</label></div>
+        <div class="countdown-unit"><span id="cdMinutes">00</span><label>Minutos</label></div>
+      </div>
+      <div class="divider divider--light"></div>
+      <a class="btn-outline btn-outline--light" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda%20de%20Luc%C3%ADa%20%26%20Salvatore&dates=20261128T153000/20261128T203000&location=Av.%20Nueva%20Toledo%20122%2C%20Cieneguilla%2C%20Lima&ctz=America/Lima" target="_blank" rel="noopener">Agenda el día</a>
     </div>
   </div>
 </section>
@@ -490,27 +189,27 @@
     <div class="divider reveal"></div>
 
     <div class="map-card reveal" style="margin-top:2.4rem;">
-      <div class="map-illustration" aria-hidden="true">
-        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="300" fill="#e3dabf"/>
-          <path d="M0,80 C90,40 140,120 240,90 C310,68 350,110 400,95" stroke="#bec5a4" stroke-width="6" fill="none" opacity=".8"/>
-          <path d="M0,190 C70,220 150,160 220,195 C300,232 340,180 400,205" stroke="#bec5a4" stroke-width="6" fill="none" opacity=".8"/>
-          <path d="M60,0 C90,90 40,170 90,300" stroke="#cec4a0" stroke-width="5" fill="none" opacity=".7"/>
-          <path d="M330,0 C300,80 350,160 310,300" stroke="#cec4a0" stroke-width="5" fill="none" opacity=".7"/>
-          <g transform="translate(200,150)">
-            <circle r="34" fill="#7c7f62" opacity=".18"/>
-            <path d="M0,-30 C16,-30 28,-18 28,-3 C28,16 0,40 0,40 C0,40 -28,16 -28,-3 C-28,-18 -16,-30 0,-30 Z" fill="#54573f"/>
-            <circle cy="-6" r="9" fill="#f1ead8"/>
-          </g>
-        </svg>
+      <div class="map-illustration">
+        <iframe
+          src="https://maps.google.com/maps?q=-12.10527042,-76.80340099&z=16&output=embed"
+          title="Ubicación de la boda"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen></iframe>
       </div>
       <div class="map-text">
         <span class="eyebrow">Cieneguilla, Lima</span>
         <p class="map-address">Av. Nueva Toledo 122<br>Cieneguilla</p>
-        <a class="cta-btn" href="https://www.google.com/maps/search/?api=1&query=Av.+Nueva+Toledo+122%2C+Cieneguilla%2C+Lima" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24"><path d="M12 2C7.6 2 4 5.6 4 10c0 6 8 12 8 12s8-6 8-12c0-4.4-3.6-8-8-8zm0 11a3 3 0 110-6 3 3 0 010 6z"/></svg>
-          Cómo llegar
-        </a>
+        <div class="map-actions">
+          <a class="cta-btn" href="https://maps.app.goo.gl/eufikWAFKNRgPaC5A" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M12 2C7.6 2 4 5.6 4 10c0 6 8 12 8 12s8-6 8-12c0-4.4-3.6-8-8-8zm0 11a3 3 0 110-6 3 3 0 010 6z"/></svg>
+            Cómo llegar
+          </a>
+          <a class="cta-btn cta-btn--waze" href="https://www.waze.com/es/live-map/directions?to=ll.-12.10527042%2C-76.80340099&from=ll.-12.0817725%2C-77.04982894" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-3.5 6.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm7 0a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm-7.02 5.3c.8 1.65 2.27 2.7 3.52 2.7s2.72-1.05 3.52-2.7a.75.75 0 10-1.35-.65c-.6 1.24-1.53 1.85-2.17 1.85s-1.57-.61-2.17-1.85a.75.75 0 10-1.35.65z"/></svg>
+            Waze
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -524,37 +223,19 @@
     <div class="divider reveal"></div>
 
     <div class="gallery reveal" style="margin-top:2.2rem;">
-      <div class="gallery-tile"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 3l-1.5 2H4a1 1 0 00-1 1v13a1 1 0 001 1h16a1 1 0 001-1V6a1 1 0 00-1-1h-3.5L15 3H9zm3 5a5 5 0 110 10 5 5 0 010-10zm0 2a3 3 0 100 6 3 3 0 000-6z"/></svg></span></div>
-      <div class="gallery-tile"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 3l-1.5 2H4a1 1 0 00-1 1v13a1 1 0 001 1h16a1 1 0 001-1V6a1 1 0 00-1-1h-3.5L15 3H9zm3 5a5 5 0 110 10 5 5 0 010-10zm0 2a3 3 0 100 6 3 3 0 000-6z"/></svg></span></div>
-      <div class="gallery-tile"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 3l-1.5 2H4a1 1 0 00-1 1v13a1 1 0 001 1h16a1 1 0 001-1V6a1 1 0 00-1-1h-3.5L15 3H9zm3 5a5 5 0 110 10 5 5 0 010-10zm0 2a3 3 0 100 6 3 3 0 000-6z"/></svg></span></div>
-      <div class="gallery-tile"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 3l-1.5 2H4a1 1 0 00-1 1v13a1 1 0 001 1h16a1 1 0 001-1V6a1 1 0 00-1-1h-3.5L15 3H9zm3 5a5 5 0 110 10 5 5 0 010-10zm0 2a3 3 0 100 6 3 3 0 000-6z"/></svg></span></div>
-      <div class="gallery-tile"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 3l-1.5 2H4a1 1 0 00-1 1v13a1 1 0 001 1h16a1 1 0 001-1V6a1 1 0 00-1-1h-3.5L15 3H9zm3 5a5 5 0 110 10 5 5 0 010-10zm0 2a3 3 0 100 6 3 3 0 000-6z"/></svg></span></div>
-      <div class="gallery-tile"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 3l-1.5 2H4a1 1 0 00-1 1v13a1 1 0 001 1h16a1 1 0 001-1V6a1 1 0 00-1-1h-3.5L15 3H9zm3 5a5 5 0 110 10 5 5 0 010-10zm0 2a3 3 0 100 6 3 3 0 000-6z"/></svg></span></div>
+      <div class="gallery-tile"><img src="assets/fotos/foto-01.webp" alt="Lucía y Salvatore" loading="lazy" /></div>
+      <div class="gallery-tile"><img src="assets/fotos/foto-06.webp" alt="Lucía y Salvatore" loading="lazy" /></div>
+      <div class="gallery-tile"><img src="assets/fotos/foto-14.webp" alt="Lucía y Salvatore" loading="lazy" /></div>
+      <div class="gallery-tile"><img src="assets/fotos/foto-17.webp" alt="Detalle de anillo" loading="lazy" /></div>
+      <div class="gallery-tile"><img src="assets/fotos/foto-20.webp" alt="Lucía y Salvatore en la playa" loading="lazy" /></div>
+      <div class="gallery-tile"><img src="assets/fotos/foto-22.webp" alt="Lucía y Salvatore en la playa" loading="lazy" /></div>
     </div>
-    <p class="gallery-note">Espacio reservado para las fotos — se completa más adelante.</p>
   </div>
 </section>
 
 <p class="foot">Lucía &amp; Salvatore — 28 de noviembre, 2026</p>
 
-<script>
-  (function(){
-    var items = document.querySelectorAll('.reveal');
-    if (!('IntersectionObserver' in window)) {
-      items.forEach(function(el){ el.classList.add('is-visible'); });
-      return;
-    }
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          io.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
-    items.forEach(function(el){ io.observe(el); });
-  })();
-</script>
+<script src="js/landing.js"></script>
 
 </body>
 </html>

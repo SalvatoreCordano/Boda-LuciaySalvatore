@@ -1,0 +1,37 @@
+/* Variables y reglas base compartidas por todas las páginas del sitio */
+:root{
+  --cream:#f1ead8;
+  --cream-deep:#e3dabf;
+  --ink:#464824;
+  --olive:#7c7f62;
+  --olive-deep:#54573f;
+  --sage:#bec5a4;
+  --gold:#cec4a0;
+
+  /* gradientes de las secciones de acento (tomados del Figma de referencia) */
+  --grad-olive: radial-gradient(ellipse 50% 169.54% at 50% 50%, #758250 0%, #697647 100%);
+  --grad-dark: radial-gradient(ellipse 50% 169.54% at 50% 50%, #484a24 0%, #3a3c19 100%);
+
+  /* textura de papel, reutilizada en el fondo de todas las páginas:
+     dos capas turbulentas combinadas (grano fino + fibra alargada)
+     para que se sienta como papel y no como ruido digital plano */
+  --paper-grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch' result='t'/><feColorMatrix in='t' type='matrix' values='0 0 0 0 0.85  0 0 0 0 0.82  0 0 0 0 0.72  0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  --paper-fiber:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='480' height='480'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='0.012 0.14' numOctaves='2' seed='4' stitchTiles='stitch' result='t'/><feColorMatrix in='t' type='matrix' values='0 0 0 0 0.72  0 0 0 0 0.68  0 0 0 0 0.56  0 0 0 0.32 0'/></filter><rect width='100%25' height='100%25' filter='url(%23f)'/></svg>");
+}
+
+*{ box-sizing:border-box; }
+
+html, body{ height:100%; }
+
+body{
+  margin:0;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:"Cormorant Garamond","Iowan Old Style",Georgia,serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+img{ max-width:100%; display:block; }
+
+a{ color:inherit; }

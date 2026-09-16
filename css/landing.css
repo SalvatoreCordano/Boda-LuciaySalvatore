@@ -1,0 +1,745 @@
+/* Página de la invitación completa (landing.html) */
+
+html{ scroll-behavior:smooth; }
+
+/* textura de papel reutilizada de la invitación */
+.paper-bg{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  background:radial-gradient(ellipse 120% 70% at 50% 0%, var(--cream) 0%, var(--cream) 60%, var(--cream-deep) 100%);
+}
+.paper-bg::after{
+  content:"";
+  position:absolute; inset:0;
+  opacity:.6;
+  mix-blend-mode:multiply;
+  background-image:var(--paper-fiber), var(--paper-grain);
+  background-size:480px 480px, 220px 220px;
+  background-blend-mode:multiply;
+}
+
+.backlink{
+  position:fixed;
+  top:20px; left:20px;
+  z-index:10;
+  font-size:.72rem;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  text-decoration:none;
+  color:var(--olive);
+  background:rgba(241,234,216,.85);
+  backdrop-filter:blur(3px);
+  padding:.5em .9em;
+  border:1px solid var(--sage);
+  border-radius:999px;
+  transition:color .2s ease, border-color .2s ease;
+}
+.backlink:hover, .backlink:focus-visible{ color:var(--ink); border-color:var(--olive); }
+
+/* ---------- estructura de sección reutilizable ---------- */
+.section{
+  padding-block:clamp(2rem, 5vw, 3.5rem);
+}
+.section--alt{ background:var(--cream-deep); }
+.section-inner{
+  max-width:1080px;
+  margin:0 auto;
+  padding-inline:clamp(20px, 6vw, 100px); /* margen de 100px en desktop */
+}
+/* --- tokens tipográficos tomados del Figma de referencia ---
+   "label": mayúsculas + tracking .35em (7px/20px o 8.4px/24px, misma proporción)
+   "body": minúsculas + tracking .2em (4.8px/24px) */
+.eyebrow{
+  display:block;
+  text-align:center;
+  font-size:clamp(.72rem, 1.35vw, 1.25rem);
+  font-weight:400;
+  letter-spacing:.35em;
+  text-transform:uppercase;
+  color:var(--ink);
+  margin:0 0 .9rem;
+}
+.heading{
+  text-align:center;
+  font-weight:600;
+  font-size:clamp(1.9rem, 4.4vw, 2.7rem);
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  margin:0;
+  text-wrap:balance;
+}
+.script{
+  font-family:"Pinyon Script",cursive;
+  font-weight:400;
+  text-transform:none;
+  letter-spacing:0;
+}
+/* separador "línea · punto · línea" reutilizado en todo el sitio */
+.divider{
+  width:204px;
+  max-width:60%;
+  height:6px;
+  margin:1.4rem auto;
+  background:
+    radial-gradient(circle 3px at center, var(--ink) 99%, transparent 100%) center/6px 6px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) left center/74px 1px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) right center/74px 1px no-repeat;
+}
+.divider--light{
+  background:
+    radial-gradient(circle 3px at center, var(--cream) 99%, transparent 100%) center/6px 6px no-repeat,
+    linear-gradient(var(--cream), var(--cream)) left center/74px 1px no-repeat,
+    linear-gradient(var(--cream), var(--cream)) right center/74px 1px no-repeat;
+}
+/* pequeño anillo usado como separador entre dos valores en línea */
+.ring-dot{
+  width:10px; height:10px;
+  border-radius:999px;
+  border:1px solid var(--ink);
+  flex:none;
+}
+.ring-dot--light{ border-color:#fff; }
+.lede{
+  max-width:520px;
+  margin:0 auto;
+  text-align:center;
+  font-size:1.15rem;
+  line-height:1.7;
+  color:var(--olive-deep);
+}
+
+/* sin JS (o si falla), el contenido queda visible de una: la clase
+   .js sólo la agrega el script, así que el estado oculto depende de ella */
+.js .reveal{
+  opacity:0;
+  transform:translateY(22px);
+  transition:opacity .8s cubic-bezier(.22,.61,.36,1), transform .8s cubic-bezier(.22,.61,.36,1);
+}
+.reveal.is-visible{ opacity:1; transform:translateY(0); }
+@media (prefers-reduced-motion: reduce){
+  .reveal{ transition:none; opacity:1; transform:none; }
+  html{ scroll-behavior:auto; }
+}
+
+/* ---------- foto a sangre ---------- */
+.section-photo{
+  width:100%;
+  height:clamp(280px, 46vw, 560px);
+  overflow:hidden;
+}
+.section-photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+/* ---------- monograma ---------- */
+.section-monogram{
+  padding-block:clamp(1.2rem, 3vw, 1.8rem);
+}
+.monogram{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:2.8rem; /* 45px */
+}
+.monogram-line{
+  width:4.6rem; height:1px; /* 74px */
+  background:var(--ink);
+}
+.monogram-logo{
+  width:clamp(44px, 5vw, 64px); /* ~84px de referencia */
+  height:auto;
+}
+
+/* ---------- confirmación de asistencia ---------- */
+.rsvp{
+  max-width:823px;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:2.6rem;
+}
+.rsvp-confirm-group{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:1.9rem; /* 30px */
+}
+.rsvp-thanks{
+  font-size:clamp(.72rem, 1.35vw, 1.25rem); /* 20px */
+  font-weight:400;
+  letter-spacing:.35em;
+  text-transform:uppercase;
+  line-height:1.9;
+  color:var(--ink);
+  margin:0;
+}
+.rsvp-confirm{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:.6rem; /* 10px */
+}
+.rsvp-confirm p{
+  font-size:clamp(1rem, 1.67vw, 1.5rem); /* 24px */
+  font-weight:400;
+  letter-spacing:.2em;
+  color:var(--ink);
+  line-height:1.4;
+  margin:0;
+}
+.rsvp-confirm b{ font-weight:700; }
+
+.rsvp-guest{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:1.9rem; /* 31px */
+}
+.rsvp-guest-name{
+  font-family:"Pinyon Script",cursive;
+  font-weight:400;
+  font-size:clamp(2.6rem, 4.45vw, 4rem); /* 64px */
+  color:var(--ink);
+  margin:0;
+}
+.rsvp-guest-label{
+  font-size:clamp(.72rem, 1.35vw, 1.25rem); /* 20px */
+  font-weight:400;
+  letter-spacing:.35em;
+  text-transform:uppercase;
+  color:var(--ink);
+  margin:0;
+}
+.rsvp-guest-passes{
+  font-weight:600;
+  font-size:clamp(2rem, 3.35vw, 3rem); /* 48px */
+  color:var(--ink);
+  margin:0;
+}
+
+.btn-outline{
+  display:inline-block;
+  padding:.95rem 1.9rem; /* 15px / 30px */
+  border:1px solid var(--ink);
+  border-radius:20px;
+  color:var(--ink);
+  text-decoration:none;
+  letter-spacing:.35em;
+  text-transform:uppercase;
+  font-size:clamp(.7rem, 1.1vw, 1rem); /* 16px */
+  font-weight:700;
+  transition:background .2s ease, color .2s ease, border-color .2s ease;
+}
+.btn-outline:hover, .btn-outline:focus-visible{
+  background:var(--ink);
+  color:var(--cream);
+}
+.btn-outline--light{
+  border-color:var(--cream);
+  color:var(--cream);
+}
+.btn-outline--light:hover, .btn-outline--light:focus-visible{
+  background:var(--cream);
+  color:var(--olive-deep);
+}
+
+/* ---------- recepción: sección en oliva ---------- */
+.section-olive .section-inner,
+.section-gold .section-inner{
+  max-width:1226px; /* columna más ancha, como en la referencia */
+}
+/* el texto (680px) es más ancho que la tarjeta (485px) en la referencia */
+#recepcion .split{ grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); }
+#regalos .split{ grid-template-columns:minmax(0,1fr) minmax(0,1.4fr); }
+
+/* título de sección: fuera de la grilla de 2 columnas, centrado sobre todo el ancho */
+.section-title{
+  text-align:center;
+  margin:0 0 2.5rem;
+}
+.section-title-group{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  gap:2.5rem; /* 40px */
+  margin-bottom:2.5rem;
+}
+.section-title-group p{
+  font-size:clamp(1rem, 1.67vw, 1.5rem); /* 24px */
+  font-weight:400;
+  letter-spacing:.2em;
+  line-height:1.6;
+  margin:0;
+}
+.section-gold .section-title-group p{ color:var(--ink); }
+/* las bandas de color necesitan más aire interno que las secciones
+   sobre fondo crema, para no sentirse apretadas contra sus bordes */
+.section-olive,
+.section-gold,
+.section-dark{
+  padding-block:clamp(3rem, 8vw, 6.25rem); /* hasta 100px */
+}
+.section-olive{
+  background:var(--grad-olive);
+  color:var(--cream);
+  box-shadow:0 2px 15px rgba(0,0,0,.15) inset, 0 2px 15px 5px rgba(0,0,0,.25);
+}
+.section-olive .heading,
+.section-olive .split-text p,
+.section-olive .dresscode-label{
+  color:var(--cream);
+}
+.section-olive .split-text,
+.section-gold .split-text{
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:2.5rem; /* 40px */
+}
+.section-olive .split-text .eyebrow,
+.section-olive .split-text .heading,
+.section-gold .split-text .eyebrow,
+.section-gold .split-text .heading{
+  text-align:center;
+}
+.section-olive .split-text p,
+.section-gold .split-text p{
+  text-align:center;
+  font-size:clamp(1rem, 1.67vw, 1.5rem); /* 24px */
+  font-weight:400;
+  letter-spacing:.2em;
+  line-height:1.6;
+  margin:0;
+}
+.section-olive .split-text .divider,
+.section-gold .split-text .divider{ margin:0; }
+.heading--script{
+  font-family:"Pinyon Script",cursive;
+  font-weight:400;
+  text-transform:none;
+  letter-spacing:0;
+  font-size:clamp(2.6rem, 4.45vw, 4rem); /* 64px */
+}
+.dresscode-label{
+  font-size:clamp(1rem, 1.67vw, 1.5rem); /* 24px */
+  letter-spacing:.35em;
+  text-transform:uppercase;
+  font-weight:700;
+  margin:0;
+}
+.dresscode-cols{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+  gap:1.5rem clamp(1.5rem, 4vw, 3.5rem); /* hasta 57px */
+}
+.dresscode-cols > div{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:.2rem;
+}
+.dresscode-cols b{
+  font-size:clamp(.72rem, 1.35vw, 1.25rem); /* 20px */
+  letter-spacing:.35em;
+  text-transform:uppercase;
+  font-weight:700;
+}
+.dresscode-cols span{
+  font-size:clamp(.72rem, 1.35vw, 1.25rem); /* 20px */
+  letter-spacing:.35em;
+  text-transform:uppercase;
+  font-weight:400;
+  color:var(--cream);
+}
+
+/* ---------- regalos: sobre el fondo crema de la página, sin bloque de color ---------- */
+.section-gold .heading,
+.section-gold .split-text p,
+.section-gold .bank-details p{
+  color:var(--ink);
+}
+
+/* tarjeta en blanco (recepcion-vacia.webp) + título superpuesto */
+.card-plaque{
+  position:relative;
+  max-width:320px;
+  margin:0 auto;
+}
+.card-plaque img{ width:100%; display:block; }
+.card-plaque-title{
+  position:absolute;
+  left:8.25%; top:42.6%;
+  width:80%;
+  text-align:center;
+  font-family:"Pinyon Script",cursive;
+  font-weight:400;
+  font-size:clamp(1.8rem, 3.1vw, 2.8rem); /* ~64px a 823px de columna */
+  color:var(--ink);
+}
+.card-plaque-title--gracias{
+  left:8.87%; top:19.76%;
+  color:#fff;
+}
+
+.gracias-badge{
+  position:relative;
+  max-width:320px;
+  margin:0 auto;
+}
+.gracias-oval{ width:100%; display:block; }
+.gracias-badge .gracias-photo{
+  position:absolute;
+  width:44%;
+  aspect-ratio:4/5;
+  object-fit:cover;
+  background:#e3e3e3;
+  border:6px solid #fdfbf5;
+  border-radius:2px;
+  box-shadow:0 4px 10px rgba(0,0,0,.25);
+}
+.gracias-photo--1{ left:-6%; bottom:8%; transform:rotate(-14deg); transform-origin:top left; }
+.gracias-photo--2{ right:-6%; bottom:0%; transform:rotate(9deg); transform-origin:top left; }
+
+.bank-details{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:1.5rem;
+}
+.bank-group{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:1rem;
+}
+.bank-group-title{
+  margin:0;
+  font-weight:400;
+  font-size:clamp(.72rem, 1.35vw, 1.25rem); /* 20px */
+  letter-spacing:.35em;
+  text-transform:uppercase;
+}
+.bank-entry{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:.4rem;
+}
+.bank-entry-label{
+  font-size:.68rem;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:var(--olive);
+}
+.bank-entry-number{
+  margin:0;
+  font-weight:700;
+  font-size:clamp(.72rem, 1.35vw, 1.25rem); /* 20px */
+  letter-spacing:.2em;
+}
+.copy-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:.4em;
+  padding:.35em .9em;
+  border:1px solid var(--ink);
+  border-radius:999px;
+  background:none;
+  color:var(--ink);
+  font-family:inherit;
+  font-size:.68rem;
+  font-weight:600;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:background .2s ease, color .2s ease;
+}
+.copy-btn svg{ width:1em; height:1em; fill:currentColor; }
+.copy-btn:hover, .copy-btn:focus-visible{
+  background:var(--ink);
+  color:var(--cream);
+}
+.copy-btn.is-copied{
+  background:var(--ink);
+  color:var(--cream);
+}
+.registry-link{
+  color:var(--ink);
+  font-weight:700;
+  text-decoration:none;
+  overflow-wrap:anywhere;
+}
+@media (max-width:760px){
+  .gracias-badge{ margin-bottom:2.4rem; }
+}
+
+/* ---------- cuenta regresiva ---------- */
+.section-dark{
+  background:var(--grad-dark);
+  color:var(--cream);
+  box-shadow:0 2px 15px rgba(0,0,0,.15) inset, 0 2px 15px 5px rgba(0,0,0,.25);
+}
+.eyebrow--light{ color:var(--cream); }
+.countdown-inner{
+  max-width:823px;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:2.5rem; /* 40px */
+}
+.countdown-date{
+  font-family:"Pinyon Script",cursive;
+  font-weight:400;
+  font-size:clamp(3.4rem, 6.67vw, 6rem); /* 96px */
+  color:var(--cream);
+  margin:0;
+}
+.countdown-sub{
+  font-size:clamp(.72rem, 1.35vw, 1.25rem); /* 20px */
+  font-weight:400;
+  letter-spacing:.35em;
+  text-transform:uppercase;
+  line-height:1.8;
+  color:var(--cream);
+  margin:0;
+}
+.countdown-group{
+  max-width:417px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:2.5rem; /* 40px */
+}
+.countdown{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:1.4rem clamp(1.2rem, 5vw, 2.8rem); /* hasta 45px */
+}
+.countdown-unit{ width:auto; min-width:4.5rem; }
+.countdown-unit span{
+  display:block;
+  font-family:"Pinyon Script",cursive;
+  font-weight:400;
+  font-size:clamp(2.6rem, 4.45vw, 4rem); /* 64px */
+  color:var(--cream);
+  line-height:1;
+}
+.countdown-unit label{
+  display:block;
+  margin-top:.4rem;
+  font-size:clamp(.72rem, 1.35vw, 1.25rem); /* 20px */
+  font-weight:400;
+  letter-spacing:.35em;
+  text-transform:uppercase;
+  color:var(--cream);
+}
+
+/* ---------- invitación ---------- */
+.names-stack{
+  max-width:823px;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:2.4rem; /* 39px */
+}
+.names-block{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.given{
+  font-weight:600;
+  font-size:clamp(2rem, 3.35vw, 3rem); /* 48px */
+  letter-spacing:0;
+  text-transform:uppercase;
+  margin:0;
+  line-height:1.05;
+}
+.surname{
+  font-family:"Pinyon Script",cursive;
+  font-weight:400;
+  font-size:clamp(2.6rem, 4.45vw, 4rem); /* 64px */
+  color:var(--ink);
+  margin:0;
+}
+.amp{
+  font-family:"Pinyon Script",cursive;
+  font-weight:400;
+  font-size:clamp(2.6rem, 4.45vw, 4rem); /* 64px */
+  margin:0;
+  display:block;
+}
+.datebox{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:baseline;
+  justify-content:center;
+  gap:.4em 1.4em;
+  margin:0;
+  font-weight:700;
+  font-size:clamp(.72rem, 1.35vw, 1.25rem); /* 20px */
+  letter-spacing:.35em;
+  text-transform:uppercase;
+  color:var(--ink);
+}
+.datebox span{ letter-spacing:inherit; }
+
+/* ---------- filas imagen + texto ---------- */
+.split{
+  display:grid;
+  grid-template-columns:minmax(0,0.85fr) minmax(0,1fr);
+  gap:clamp(1.8rem, 5vw, 3.6rem);
+  align-items:center;
+}
+.split--reverse .split-media{ order:2; }
+.split-media{
+  position:relative;
+}
+.split-media img{
+  width:100%;
+  border-radius:2px;
+}
+.split-text{ min-width:0; }
+.split-media{ min-width:0; }
+.split-text .eyebrow, .split-text .heading{ text-align:left; }
+.split-text .divider{ margin-left:0; }
+.split-text p{
+  font-size:1.08rem;
+  line-height:1.75;
+  color:var(--olive-deep);
+  margin:0 0 1rem;
+}
+.detail-list{
+  list-style:none;
+  margin:1.4rem 0 0;
+  padding:0;
+  display:grid;
+  gap:.55rem;
+  font-size:.85rem;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--ink);
+}
+.detail-list li{
+  display:flex;
+  gap:.6em;
+}
+.detail-list b{ min-width:8.5em; color:var(--olive); font-weight:600; }
+
+@media (max-width:760px){
+  .split, .split--reverse .split-media{ order:0; }
+  .split{ grid-template-columns:1fr; }
+  .split-text .eyebrow, .split-text .heading{ text-align:center; }
+  .split-text .divider{ margin-inline:auto; }
+  .split-text p{ text-align:center; }
+  .detail-list{ justify-items:center; }
+  .detail-list li{ flex-direction:column; align-items:center; gap:.15em; }
+  .detail-list b{ min-width:0; }
+}
+
+/* ---------- ubicación ---------- */
+.map-card{
+  display:grid;
+  grid-template-columns:1.1fr 1fr;
+  gap:clamp(1.6rem,4vw,3rem);
+  align-items:center;
+  background:var(--cream);
+  border:1px solid var(--sage);
+  border-radius:6px;
+  padding:clamp(1.6rem, 4vw, 2.6rem);
+}
+.map-illustration{
+  aspect-ratio:4/3;
+  border-radius:4px;
+  overflow:hidden;
+  background:var(--cream-deep);
+}
+.map-illustration iframe{
+  width:100%;
+  height:100%;
+  display:block;
+  border:0;
+}
+.map-text{ text-align:left; }
+.map-text .eyebrow{ text-align:left; }
+.map-address{
+  font-size:1.3rem;
+  line-height:1.5;
+  margin:.6rem 0 1.6rem;
+}
+.map-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.8rem;
+}
+.cta-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:.6em;
+  padding:.85em 1.6em;
+  background:var(--olive);
+  color:var(--cream);
+  text-decoration:none;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  font-size:.78rem;
+  border-radius:999px;
+  transition:background .2s ease, transform .2s ease;
+}
+.cta-btn:hover, .cta-btn:focus-visible{ background:var(--olive-deep); transform:translateY(-1px); }
+.cta-btn svg{ width:1em; height:1em; fill:currentColor; }
+.cta-btn--waze{ background:#33ccff; color:#0a2a3a; }
+.cta-btn--waze:hover, .cta-btn--waze:focus-visible{ background:#1fb8ec; }
+
+@media (max-width:760px){
+  .map-card{ grid-template-columns:1fr; }
+  .map-text{ text-align:center; }
+  .map-text .eyebrow{ text-align:center; }
+  .map-actions{ justify-content:center; }
+}
+
+/* ---------- galería ---------- */
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:12px;
+}
+.gallery-tile{
+  position:relative;
+  aspect-ratio:1;
+  border-radius:3px;
+  overflow:hidden;
+  background:var(--cream-deep);
+}
+.gallery-tile img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  transition:transform .5s ease;
+}
+.gallery-tile:hover img,
+.gallery-tile:focus-within img{ transform:scale(1.06); }
+@media (max-width:600px){
+  .gallery{ grid-template-columns:repeat(2, 1fr); }
+}
+
+.foot{
+  text-align:center;
+  padding:2.4rem 20px calc(2.4rem + env(safe-area-inset-bottom, 0px));
+  font-style:italic;
+  font-size:.85rem;
+  color:var(--olive);
+}
