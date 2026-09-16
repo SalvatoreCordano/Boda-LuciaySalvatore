@@ -157,16 +157,54 @@
     --rot:14deg;
   }
 
-  .credit{
+  .bottom-stack{
     position:absolute;
     left:0;
     right:0;
     bottom:max(24px, env(safe-area-inset-bottom, 0px) + 12px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+  }
+
+  .credit{
     text-align:center;
     font:italic 13px/1.4 Georgia, serif;
     color:#71755d;
     letter-spacing:0.02em;
     pointer-events:none;
+    margin:0;
+  }
+
+  /* aparece recién cuando termina de revelarse toda la invitación */
+  .more-link{
+    opacity:0;
+    transform:translateY(10px);
+    pointer-events:none;
+    text-decoration:none;
+    color:#5c5c46;
+    font:600 12px/1 "Georgia", serif;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    padding:0.05em 0 0.35em;
+    border-bottom:1px solid #8a8e75;
+    transition:color .2s ease, border-color .2s ease;
+  }
+  .more-link:hover,
+  .more-link:focus-visible{
+    color:#3f4231;
+    border-color:#5f6249;
+  }
+  .more-link.is-visible{
+    animation:moreIn .7s cubic-bezier(.22,.61,.36,1) forwards;
+    pointer-events:auto;
+  }
+  @keyframes moreIn{
+    to{ opacity:1; transform:translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .more-link.is-visible{ animation:none; opacity:1; transform:none; }
   }
 
   /* --- mobile: el lienzo de 1440x1024 está pensado para escritorio y en
@@ -214,7 +252,10 @@
     </div>
   </div>
 
-  <p class="credit">Lucía &amp; Salvatore — 28 de noviembre, 2026</p>
+  <div class="bottom-stack">
+    <a class="more-link" id="moreLink" href="landing.html">Saber más</a>
+    <p class="credit">Lucía &amp; Salvatore — 28 de noviembre, 2026</p>
+  </div>
 </div>
 
 <script>
@@ -223,6 +264,7 @@
     var envelopeScene = document.getElementById('envelopeScene');
     var letterScene = document.getElementById('letterScene');
     var cardSobre = document.getElementById('cardSobre');
+    var moreLink = document.getElementById('moreLink');
     var extraCards = [
       document.getElementById('cardRegalos'),
       document.getElementById('cardRecepcion'),
@@ -256,6 +298,11 @@
           extraCards.forEach(function(card, i){
             setTimeout(function(){ reveal(card); }, i * stagger);
           });
+
+          // el link "Saber más" aparece justo después de que termina
+          // de asentarse la última tarjeta
+          var lastCardDelay = (extraCards.length - 1) * stagger;
+          setTimeout(function(){ reveal(moreLink); }, lastCardDelay + revealDuration + 300);
         }, revealDuration + pauseBeforeContent);
       }, envelopeFade);
     });
