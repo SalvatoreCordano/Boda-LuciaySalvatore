@@ -165,24 +165,27 @@
   margin:0;
 }
 
-/* aparece recién cuando termina de revelarse toda la invitación */
+/* aparece recién cuando termina de revelarse toda la invitación;
+   mismo estilo de botón outline que usamos en la landing */
 .more-link{
   opacity:0;
   transform:translateY(10px);
   pointer-events:none;
+  display:inline-block;
+  padding:.75em 1.8em;
+  border:1px solid #464824;
+  border-radius:20px;
   text-decoration:none;
-  color:#5c5c46;
-  font:600 12px/1 "Georgia", serif;
-  letter-spacing:0.22em;
+  color:#464824;
+  font:700 12px/1 "Cormorant Garamond", "Georgia", serif;
+  letter-spacing:0.3em;
   text-transform:uppercase;
-  padding:0.05em 0 0.35em;
-  border-bottom:1px solid #8a8e75;
-  transition:color .2s ease, border-color .2s ease;
+  transition:background .2s ease, color .2s ease;
 }
 .more-link:hover,
 .more-link:focus-visible{
-  color:#3f4231;
-  border-color:#5f6249;
+  background:#464824;
+  color:#f1ead8;
 }
 .more-link.is-visible{
   animation:moreIn .7s cubic-bezier(.22,.61,.36,1) forwards;

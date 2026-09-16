@@ -39,7 +39,7 @@ html{ scroll-behavior:smooth; }
 
 /* ---------- estructura de sección reutilizable ---------- */
 .section{
-  padding-block:clamp(2rem, 5vw, 3.5rem);
+  padding-block:clamp(6.25rem, 7vw, 6.25rem); /* hasta 100px */
 }
 .section--alt{ background:var(--cream-deep); }
 .section-inner{

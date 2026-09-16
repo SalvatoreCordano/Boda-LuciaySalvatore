@@ -1,0 +1,8 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": true,
+  "redirects": [
+    { "source": "/landing.html", "destination": "/invitacion/", "permanent": true },
+    { "source": "/landing", "destination": "/invitacion/", "permanent": true }
+  ]
+}
