@@ -255,7 +255,7 @@ html{ scroll-behavior:smooth; }
 }
 /* el texto (680px) es más ancho que la tarjeta (485px) en la referencia */
 #recepcion .split{ grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); align-items:stretch; }
-#regalos .split{ grid-template-columns:minmax(0,1fr) minmax(0,1.4fr); }
+#regalos .split{ grid-template-columns:minmax(0,1fr) minmax(0,1.4fr); gap:3.75rem; }
 
 /* título de sección: fuera de la grilla de 2 columnas, centrado sobre todo el ancho */
 .section-title{
@@ -397,7 +397,8 @@ html{ scroll-behavior:smooth; }
 
 .gracias-badge{
   position:relative;
-  max-width:320px;
+  width:100%;
+  max-width:485px;
   margin:0 auto;
 }
 .gracias-oval{ width:100%; display:block; }
@@ -420,13 +421,13 @@ html{ scroll-behavior:smooth; }
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:1.5rem;
+  gap:1.875rem;
 }
 .bank-group{
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:1rem;
+  gap:.625rem;
 }
 .bank-group-title{
   margin:0;
