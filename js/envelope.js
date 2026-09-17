@@ -5,11 +5,11 @@
   var cardSobre = document.getElementById('cardSobre');
   var moreLink = document.getElementById('moreLink');
   var extraCards = [
+    document.getElementById('cardGrupo1'),
+    document.getElementById('cardGrupo2'),
     document.getElementById('cardRegalos'),
     document.getElementById('cardRecepcion'),
-    document.getElementById('cardInvitacion'),
-    document.getElementById('cardGrupo1'),
-    document.getElementById('cardGrupo2')
+    document.getElementById('cardInvitacion')
   ];
   var opened = false;
 

@@ -144,11 +144,8 @@
   left:51.69%; top:42.97%; width:20.46%;
   --rot:14deg;
 }
-/* siempre por encima del resto de las tarjetas */
-.card--grupo-1,
-.card--grupo-2{
-  z-index:10;
-}
+/* van detrás de las tarjetas y delante del sobre abierto:
+   el orden en el HTML ya resuelve esa capa, sin necesidad de z-index */
 .card--grupo-1{
   left:15.14%; top:39.49%; width:19.72%;
   --rot:-14deg;
