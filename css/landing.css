@@ -824,5 +824,6 @@ html{ scroll-behavior:smooth; }
   padding:2.4rem 20px calc(2.4rem + env(safe-area-inset-bottom, 0px));
   font-style:italic;
   font-size:.85rem;
-  color:var(--olive);
+  background:var(--olive);
+  color:var(--cream);
 }
