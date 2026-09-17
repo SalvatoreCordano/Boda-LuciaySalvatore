@@ -7,8 +7,9 @@
   if (!audio || !player || !toggleBtn) return;
 
   var VOL_STEP = 0.1;
+  var DEFAULT_VOL = 0.25;
   var storedVol = parseFloat(localStorage.getItem('musicVolume'));
-  audio.volume = isNaN(storedVol) ? 0.6 : Math.min(1, Math.max(0, storedVol));
+  audio.volume = isNaN(storedVol) ? DEFAULT_VOL : Math.min(1, Math.max(0, storedVol));
 
   function updateUI(){
     player.classList.toggle('is-playing', !audio.paused);
