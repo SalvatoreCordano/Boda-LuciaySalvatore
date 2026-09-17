@@ -406,12 +406,12 @@ html{ scroll-behavior:smooth; }
   position:absolute;
   object-fit:contain;
 }
-.gracias-photo--1{
+.gracias-badge .gracias-photo--1{
   left:0%; top:49.31%; width:52.78%;
   aspect-ratio:256/310;
   transform:rotate(-18deg); transform-origin:top left;
 }
-.gracias-photo--2{
+.gracias-badge .gracias-photo--2{
   left:49.28%; top:40.55%; width:51.75%;
   aspect-ratio:251/304;
   transform:rotate(11deg); transform-origin:top left;
@@ -678,6 +678,19 @@ html{ scroll-behavior:smooth; }
     width:min(72%, 300px);
     max-width:min(72%, 300px);
     margin:0 auto;
+  }
+}
+
+/* regalos: mismo problema que recepción (ver arriba) — el grid de
+   2 columnas nunca cedía a 1fr por especificidad, dejando la tarjeta
+   "Gracias" centrada verticalmente y flotando encima del texto. Se
+   apila: título (ya va antes del .split) -> tarjeta -> información,
+   que ya es el orden natural del HTML. */
+@media (max-width:839px){
+  #regalos .split{
+    grid-template-columns:1fr;
+    align-items:center;
+    gap:2.2rem;
   }
 }
 
