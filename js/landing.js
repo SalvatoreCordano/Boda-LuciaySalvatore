@@ -42,6 +42,7 @@
 (function(){
   var guestBlock = document.getElementById('rsvpGuest');
   var nameEl = document.getElementById('rsvpGuestName');
+  var labelEl = document.getElementById('rsvpGuestLabel');
   var passesEl = document.getElementById('rsvpGuestPasses');
   if (!guestBlock) return;
 
@@ -78,9 +79,17 @@
         var rowCode = (cols[0] || '').trim().toLowerCase();
         if (rowCode === code) {
           var name = (cols[1] || '').trim();
-          var passes = parseInt(cols[2], 10) || 1;
+          var passesRaw = (cols[2] || '').trim();
+          var passes = parseInt(passesRaw, 10);
           nameEl.textContent = name;
-          passesEl.textContent = passes + (passes === 1 ? ' pase' : ' pases');
+          if (passesRaw && !isNaN(passes)) {
+            passesEl.textContent = passes + (passes === 1 ? ' pase' : ' pases');
+            labelEl.hidden = false;
+            passesEl.hidden = false;
+          } else {
+            labelEl.hidden = true;
+            passesEl.hidden = true;
+          }
           guestBlock.hidden = false;
           return;
         }
