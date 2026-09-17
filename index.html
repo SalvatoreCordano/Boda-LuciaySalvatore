@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/base.css?v=3" />
-<link rel="stylesheet" href="css/envelope.css?v=6" />
+<link rel="stylesheet" href="css/envelope.css?v=7" />
 </head>
 <body>
 
@@ -47,12 +47,13 @@
     <p class="code-modal-hint">Lo encuentras en el mensaje o tarjeta que te enviamos.</p>
     <form id="codeForm">
       <input type="text" id="codeInput" class="code-modal-input" placeholder="Ej. 123456" inputmode="numeric" autocomplete="off" />
+      <p class="code-modal-error" id="codeError" hidden>Código incorrecto. Verifica e intenta de nuevo.</p>
       <button type="submit" class="code-modal-submit">Continuar</button>
     </form>
   </div>
 </div>
 
-<script src="js/envelope.js?v=5"></script>
+<script src="js/envelope.js?v=6"></script>
 
 </body>
 </html>

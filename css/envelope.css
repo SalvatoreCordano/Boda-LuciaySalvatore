@@ -247,6 +247,12 @@
   outline:2px solid #71755d;
   outline-offset:2px;
 }
+.code-modal-error{
+  margin:-.4rem 0 1rem;
+  font-size:.78rem;
+  color:#a2453a;
+  text-align:center;
+}
 .code-modal-submit{
   width:100%;
   padding:.75em 1.6em;

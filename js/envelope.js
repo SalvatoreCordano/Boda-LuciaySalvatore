@@ -54,15 +54,54 @@
   var modal = document.getElementById('codeModal');
   var form = document.getElementById('codeForm');
   var input = document.getElementById('codeInput');
+  var errorEl = document.getElementById('codeError');
+  var submitBtn = form ? form.querySelector('.code-modal-submit') : null;
   if (!moreLink || !modal) return;
 
   var existingCode = new URLSearchParams(location.search).get('inv');
-  if (existingCode) {
-    moreLink.href = '/invitacion/?inv=' + encodeURIComponent(existingCode.trim());
-    return; // ya tiene código, no hace falta preguntar
+
+  function parseCsvLine(line){
+    var cells = [];
+    var cur = '';
+    var inQuotes = false;
+    for (var i = 0; i < line.length; i++){
+      var ch = line[i];
+      if (inQuotes) {
+        if (ch === '"' && line[i + 1] === '"') { cur += '"'; i++; }
+        else if (ch === '"') { inQuotes = false; }
+        else { cur += ch; }
+      } else {
+        if (ch === '"') { inQuotes = true; }
+        else if (ch === ',') { cells.push(cur); cur = ''; }
+        else { cur += ch; }
+      }
+    }
+    cells.push(cur);
+    return cells;
   }
 
-  function openModal(){
+  function isValidCode(code){
+    var target = code.trim().toLowerCase();
+    if (!target) return Promise.resolve(false);
+    return fetch('/invitados.csv', { cache: 'no-store' })
+      .then(function(res){ return res.ok ? res.text() : ''; })
+      .then(function(text){
+        var rows = text.split(/\r?\n/).filter(function(r){ return r.trim().length; });
+        for (var i = 1; i < rows.length; i++) {
+          var cols = parseCsvLine(rows[i]);
+          if ((cols[0] || '').trim().toLowerCase() === target) return true;
+        }
+        return false;
+      })
+      .catch(function(){ return false; });
+  }
+
+  function goToInvitacion(code){
+    location.href = '/invitacion/?inv=' + encodeURIComponent(code.trim());
+  }
+
+  function openModal(showError){
+    if (errorEl) errorEl.hidden = !showError;
     modal.hidden = false;
     setTimeout(function(){ input.focus(); }, 50);
   }
@@ -72,14 +111,28 @@
 
   moreLink.addEventListener('click', function(e){
     e.preventDefault();
-    openModal();
+    if (!existingCode) { openModal(false); return; }
+    isValidCode(existingCode).then(function(ok){
+      if (ok) { goToInvitacion(existingCode); }
+      else { openModal(true); }
+    });
   });
 
   form.addEventListener('submit', function(e){
     e.preventDefault();
     var code = input.value.trim();
     if (!code) { input.focus(); return; }
-    location.href = '/invitacion/?inv=' + encodeURIComponent(code);
+    if (submitBtn) submitBtn.disabled = true;
+    isValidCode(code).then(function(ok){
+      if (submitBtn) submitBtn.disabled = false;
+      if (ok) {
+        goToInvitacion(code);
+      } else if (errorEl) {
+        errorEl.hidden = false;
+        input.focus();
+        input.select();
+      }
+    });
   });
 
   modal.addEventListener('click', function(e){
