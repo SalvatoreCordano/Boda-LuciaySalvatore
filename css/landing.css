@@ -27,8 +27,9 @@ body{ padding-top:56px; }
   z-index:100;
   display:flex;
   align-items:center;
-  justify-content:center;
+  gap:1.2rem;
   height:56px;
+  padding-inline:16px;
   background:rgba(241,234,216,.7);
   backdrop-filter:blur(8px);
   -webkit-backdrop-filter:blur(8px);
@@ -37,15 +38,39 @@ body{ padding-top:56px; }
 .nav-logo{
   display:inline-flex;
   align-items:center;
+  flex-shrink:0;
   padding:8px;
 }
 .nav-logo img{
-  height:26px;
+  height:24px;
   width:auto;
   display:block;
   transition:transform .2s ease, opacity .2s ease;
 }
 .nav-logo:hover img, .nav-logo:focus-visible img{ transform:scale(1.08); }
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:1.3rem;
+  margin:0 auto;
+  padding-right:16px;
+  overflow-x:auto;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+}
+.nav-links::-webkit-scrollbar{ display:none; }
+.nav-links a{
+  flex-shrink:0;
+  font-size:.68rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  text-decoration:none;
+  color:var(--olive);
+  white-space:nowrap;
+  transition:color .2s ease;
+}
+.nav-links a:hover, .nav-links a:focus-visible{ color:var(--ink); }
 
 /* ---------- estructura de sección reutilizable ---------- */
 .section{
