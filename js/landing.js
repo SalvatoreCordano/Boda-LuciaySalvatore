@@ -1,4 +1,29 @@
 (function(){
+  var toggle = document.getElementById('navToggle');
+  var menu = document.getElementById('navMobileMenu');
+  if (!toggle || !menu) return;
+
+  function closeMenu(){
+    menu.hidden = true;
+    toggle.setAttribute('aria-expanded', 'false');
+  }
+  function openMenu(){
+    menu.hidden = false;
+    toggle.setAttribute('aria-expanded', 'true');
+  }
+
+  toggle.addEventListener('click', function(){
+    if (menu.hidden) openMenu(); else closeMenu();
+  });
+  menu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', closeMenu);
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && !menu.hidden) closeMenu();
+  });
+})();
+
+(function(){
   var items = document.querySelectorAll('.reveal');
   if (!('IntersectionObserver' in window)) {
     items.forEach(function(el){ el.classList.add('is-visible'); });

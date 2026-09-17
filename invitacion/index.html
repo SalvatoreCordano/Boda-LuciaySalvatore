@@ -8,25 +8,40 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/base.css?v=2" />
-<link rel="stylesheet" href="/css/landing.css?v=14" />
+<link rel="stylesheet" href="/css/landing.css?v=15" />
 </head>
 <body>
 
 <div class="paper-bg"></div>
 
 <nav class="nav-bar">
-  <a class="nav-logo" href="/" aria-label="Volver al sobre">
-    <img src="/assets/Logo.svg" alt="Lucía &amp; Salvatore" />
-  </a>
-  <div class="nav-links">
+  <button class="nav-toggle" id="navToggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="navMobileMenu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links nav-links--left">
     <a href="#invitacion">Invitación</a>
     <a href="#recepcion">Recepción</a>
     <a href="#regalos">Regalos</a>
+  </div>
+  <a class="nav-logo" href="/" aria-label="Volver al sobre">
+    <img src="/assets/Logo.svg" alt="Lucía &amp; Salvatore" />
+  </a>
+  <div class="nav-links nav-links--right">
     <a href="#cuenta-regresiva">Hora</a>
     <a href="#ubicacion">Ubicación</a>
     <a href="#galeria">Fotos</a>
   </div>
+  <div class="nav-spacer" aria-hidden="true"></div>
 </nav>
+
+<div class="nav-mobile-menu" id="navMobileMenu" hidden>
+  <a href="#invitacion">Invitación</a>
+  <a href="#recepcion">Recepción</a>
+  <a href="#regalos">Regalos</a>
+  <a href="#cuenta-regresiva">Hora</a>
+  <a href="#ubicacion">Ubicación</a>
+  <a href="#galeria">Fotos</a>
+</div>
 
 <!-- LA INVITACIÓN -->
 <section class="section" id="invitacion">
@@ -248,7 +263,7 @@
 
 <p class="foot">Lucía &amp; Salvatore — 28 de noviembre, 2026</p>
 
-<script src="/js/landing.js?v=6"></script>
+<script src="/js/landing.js?v=7"></script>
 
 </body>
 </html>
