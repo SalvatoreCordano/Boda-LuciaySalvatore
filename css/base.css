@@ -35,3 +35,44 @@ body{
 img{ max-width:100%; display:block; }
 
 a{ color:inherit; }
+
+/* Reproductor de música flotante, compartido por todas las páginas */
+.music-player{
+  position:fixed;
+  left:14px;
+  bottom:14px;
+  z-index:500;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  padding:6px;
+  border-radius:999px;
+  background:rgba(241,234,216,0.92);
+  border:1px solid var(--gold);
+  box-shadow:0 4px 14px rgba(0,0,0,0.12);
+  backdrop-filter:blur(2px);
+}
+.music-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  border:none;
+  background:transparent;
+  color:var(--ink);
+  cursor:pointer;
+  font-family:inherit;
+  font-size:1.05rem;
+  line-height:1;
+  padding:0;
+  transition:background 0.15s ease;
+}
+.music-btn:hover{ background:var(--cream-deep); }
+.music-btn svg{ width:16px; height:16px; fill:currentColor; }
+.music-toggle{ width:38px; height:38px; background:var(--olive); color:var(--cream); }
+.music-toggle:hover{ background:var(--olive-deep); }
+.music-toggle .icon-pause{ display:none; }
+.music-player.is-playing .icon-play{ display:none; }
+.music-player.is-playing .icon-pause{ display:flex; }

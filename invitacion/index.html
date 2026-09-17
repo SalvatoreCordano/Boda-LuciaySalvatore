@@ -263,7 +263,18 @@
 
 <p class="foot">Lucía &amp; Salvatore — 28 de noviembre, 2026</p>
 
+<div class="music-player" id="musicPlayer">
+  <audio id="bgMusic" src="/assets/musica.mp3" loop preload="none"></audio>
+  <button class="music-btn" id="musicVolDown" type="button" aria-label="Bajar volumen">−</button>
+  <button class="music-btn music-toggle" id="musicToggle" type="button" aria-label="Reproducir música">
+    <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    <svg class="icon-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>
+  </button>
+  <button class="music-btn" id="musicVolUp" type="button" aria-label="Subir volumen">+</button>
+</div>
+
 <script src="/js/landing.js?v=7"></script>
+<script src="/js/music-player.js?v=1"></script>
 
 </body>
 </html>
