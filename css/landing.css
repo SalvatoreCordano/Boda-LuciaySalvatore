@@ -725,6 +725,13 @@ html{ scroll-behavior:smooth; }
   flex-wrap:wrap;
   gap:.8rem;
 }
+.map-note{
+  margin:1rem 0 0;
+  font-size:.8rem;
+  font-style:italic;
+  color:var(--olive);
+  line-height:1.5;
+}
 .cta-btn{
   display:inline-flex;
   align-items:center;
