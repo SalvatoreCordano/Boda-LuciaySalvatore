@@ -40,6 +40,38 @@
 })();
 
 (function(){
+  var lightbox = document.getElementById('lightbox');
+  var lightboxImg = document.getElementById('lightboxImg');
+  var closeBtn = document.getElementById('lightboxClose');
+  var tiles = document.querySelectorAll('.gallery-tile');
+  if (!lightbox || !tiles.length) return;
+
+  function open(src, alt){
+    lightboxImg.src = src;
+    lightboxImg.alt = alt || '';
+    lightbox.hidden = false;
+  }
+  function close(){
+    lightbox.hidden = true;
+    lightboxImg.src = '';
+  }
+
+  tiles.forEach(function(tile){
+    tile.addEventListener('click', function(){
+      var img = tile.querySelector('img');
+      open(img.src, img.alt);
+    });
+  });
+  closeBtn.addEventListener('click', close);
+  lightbox.addEventListener('click', function(e){
+    if (e.target === lightbox) close();
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && !lightbox.hidden) close();
+  });
+})();
+
+(function(){
   var buttons = document.querySelectorAll('.copy-btn');
   if (!buttons.length) return;
 

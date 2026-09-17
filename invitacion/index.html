@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/base.css?v=2" />
-<link rel="stylesheet" href="/css/landing.css?v=9" />
+<link rel="stylesheet" href="/css/landing.css?v=10" />
 </head>
 <body>
 
@@ -180,7 +180,7 @@
 <section class="section section--alt" id="ubicacion">
   <div class="section-inner">
     <span class="eyebrow reveal">Cómo llegar</span>
-    <h2 class="heading reveal">Ubicación</h2>
+    <h2 class="heading heading--script reveal">Ubicación</h2>
     <div class="divider reveal"></div>
 
     <div class="map-card reveal" style="margin-top:2.4rem;">
@@ -214,23 +214,28 @@
 <section class="section" id="galeria">
   <div class="section-inner">
     <span class="eyebrow reveal">Un vistazo</span>
-    <h2 class="heading reveal"><span class="script">Nuestros</span> momentos</h2>
+    <h2 class="heading heading--script reveal">Nuestros momentos</h2>
     <div class="divider reveal"></div>
 
     <div class="gallery reveal" style="margin-top:2.2rem;">
-      <div class="gallery-tile"><img src="/assets/fotos/foto-01.webp" alt="Lucía y Salvatore" loading="lazy" /></div>
-      <div class="gallery-tile"><img src="/assets/fotos/foto-06.webp" alt="Lucía y Salvatore" loading="lazy" /></div>
-      <div class="gallery-tile"><img src="/assets/fotos/foto-14.webp" alt="Lucía y Salvatore" loading="lazy" /></div>
-      <div class="gallery-tile"><img src="/assets/fotos/foto-17.webp" alt="Detalle de anillo" loading="lazy" /></div>
-      <div class="gallery-tile"><img src="/assets/fotos/foto-20.webp" alt="Lucía y Salvatore en la playa" loading="lazy" /></div>
-      <div class="gallery-tile"><img src="/assets/fotos/foto-22.webp" alt="Lucía y Salvatore en la playa" loading="lazy" /></div>
+      <button class="gallery-tile" type="button"><img src="/assets/fotos/foto-01.webp" alt="Lucía y Salvatore" loading="lazy" /></button>
+      <button class="gallery-tile" type="button"><img src="/assets/fotos/foto-06.webp" alt="Lucía y Salvatore" loading="lazy" /></button>
+      <button class="gallery-tile" type="button"><img src="/assets/fotos/foto-14.webp" alt="Lucía y Salvatore" loading="lazy" /></button>
+      <button class="gallery-tile" type="button"><img src="/assets/fotos/foto-17.webp" alt="Detalle de anillo" loading="lazy" /></button>
+      <button class="gallery-tile" type="button"><img src="/assets/fotos/foto-20.webp" alt="Lucía y Salvatore en la playa" loading="lazy" /></button>
+      <button class="gallery-tile" type="button"><img src="/assets/fotos/foto-22.webp" alt="Lucía y Salvatore en la playa" loading="lazy" /></button>
     </div>
   </div>
 </section>
 
+<div class="lightbox" id="lightbox" hidden>
+  <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Cerrar">&times;</button>
+  <img class="lightbox-img" id="lightboxImg" src="" alt="" />
+</div>
+
 <p class="foot">Lucía &amp; Salvatore — 28 de noviembre, 2026</p>
 
-<script src="/js/landing.js?v=3"></script>
+<script src="/js/landing.js?v=4"></script>
 
 </body>
 </html>
