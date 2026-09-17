@@ -7,7 +7,9 @@
   var extraCards = [
     document.getElementById('cardRegalos'),
     document.getElementById('cardRecepcion'),
-    document.getElementById('cardInvitacion')
+    document.getElementById('cardInvitacion'),
+    document.getElementById('cardGrupo1'),
+    document.getElementById('cardGrupo2')
   ];
   var opened = false;
 
