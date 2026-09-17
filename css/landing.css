@@ -254,7 +254,7 @@ html{ scroll-behavior:smooth; }
   max-width:1226px; /* columna más ancha, como en la referencia */
 }
 /* el texto (680px) es más ancho que la tarjeta (485px) en la referencia */
-#recepcion .split{ grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); }
+#recepcion .split{ grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); align-items:stretch; }
 #regalos .split{ grid-template-columns:minmax(0,1fr) minmax(0,1.4fr); }
 
 /* título de sección: fuera de la grilla de 2 columnas, centrado sobre todo el ancho */
@@ -368,13 +368,18 @@ html{ scroll-behavior:smooth; }
   color:var(--ink);
 }
 
-/* tarjeta en blanco (recepcion-vacia.webp) + título superpuesto */
+/* tarjeta en blanco (recepcion-vacia.webp) + título superpuesto.
+   Se estira a la altura de la columna de texto (misma fila del grid)
+   y ajusta su ancho según su propia proporción (478:573); si el
+   ancho disponible no alcanza, el max-width la limita y listo. */
 .card-plaque{
   position:relative;
-  max-width:320px;
-  margin:0 auto;
+  height:100%;
+  aspect-ratio:478/573;
+  width:auto;
+  max-width:100%;
 }
-.card-plaque img{ width:100%; display:block; }
+.card-plaque img{ width:100%; height:100%; display:block; object-fit:cover; }
 .card-plaque-title{
   position:absolute;
   left:8.25%; top:42.6%;
@@ -398,16 +403,18 @@ html{ scroll-behavior:smooth; }
 .gracias-oval{ width:100%; display:block; }
 .gracias-badge .gracias-photo{
   position:absolute;
-  width:44%;
-  aspect-ratio:4/5;
-  object-fit:cover;
-  background:#e3e3e3;
-  border:6px solid #fdfbf5;
-  border-radius:2px;
-  box-shadow:0 4px 10px rgba(0,0,0,.25);
+  object-fit:contain;
 }
-.gracias-photo--1{ left:-6%; bottom:8%; transform:rotate(-14deg); transform-origin:top left; }
-.gracias-photo--2{ right:-6%; bottom:0%; transform:rotate(9deg); transform-origin:top left; }
+.gracias-photo--1{
+  left:0%; top:49.31%; width:52.78%;
+  aspect-ratio:256/310;
+  transform:rotate(-18deg); transform-origin:top left;
+}
+.gracias-photo--2{
+  left:49.28%; top:40.55%; width:51.75%;
+  aspect-ratio:251/304;
+  transform:rotate(11deg); transform-origin:top left;
+}
 
 .bank-details{
   display:flex;
@@ -606,6 +613,9 @@ html{ scroll-behavior:smooth; }
 .split--reverse .split-media{ order:2; }
 .split-media{
   position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 .split-media img{
   width:100%;
