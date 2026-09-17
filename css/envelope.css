@@ -264,18 +264,6 @@
   background:#f1ead8;
   color:#464824;
 }
-.code-modal-skip{
-  display:block;
-  margin:1rem auto 0;
-  padding:.3em;
-  border:0;
-  background:none;
-  color:#7c7f62;
-  font:400 .78rem "Cormorant Garamond", Georgia, serif;
-  letter-spacing:.05em;
-  text-decoration:underline;
-  cursor:pointer;
-}
 
 /* --- mobile: el lienzo de 1440x1024 está pensado para escritorio y en
    pantallas angostas deja al sobre chico con márgenes enormes a los

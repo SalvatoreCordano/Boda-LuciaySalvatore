@@ -54,7 +54,6 @@
   var modal = document.getElementById('codeModal');
   var form = document.getElementById('codeForm');
   var input = document.getElementById('codeInput');
-  var skipBtn = document.getElementById('codeSkip');
   if (!moreLink || !modal) return;
 
   var existingCode = new URLSearchParams(location.search).get('inv');
@@ -81,10 +80,6 @@
     var code = input.value.trim();
     if (!code) { input.focus(); return; }
     location.href = '/invitacion/?inv=' + encodeURIComponent(code);
-  });
-
-  skipBtn.addEventListener('click', function(){
-    location.href = '/invitacion/';
   });
 
   modal.addEventListener('click', function(e){
