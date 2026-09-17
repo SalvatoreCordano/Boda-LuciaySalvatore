@@ -48,3 +48,49 @@
     }, envelopeFade);
   });
 })();
+
+(function(){
+  var moreLink = document.getElementById('moreLink');
+  var modal = document.getElementById('codeModal');
+  var form = document.getElementById('codeForm');
+  var input = document.getElementById('codeInput');
+  var skipBtn = document.getElementById('codeSkip');
+  if (!moreLink || !modal) return;
+
+  var existingCode = new URLSearchParams(location.search).get('inv');
+  if (existingCode) {
+    moreLink.href = '/invitacion/?inv=' + encodeURIComponent(existingCode.trim());
+    return; // ya tiene código, no hace falta preguntar
+  }
+
+  function openModal(){
+    modal.hidden = false;
+    setTimeout(function(){ input.focus(); }, 50);
+  }
+  function closeModal(){
+    modal.hidden = true;
+  }
+
+  moreLink.addEventListener('click', function(e){
+    e.preventDefault();
+    openModal();
+  });
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var code = input.value.trim();
+    if (!code) { input.focus(); return; }
+    location.href = '/invitacion/?inv=' + encodeURIComponent(code);
+  });
+
+  skipBtn.addEventListener('click', function(){
+    location.href = '/invitacion/';
+  });
+
+  modal.addEventListener('click', function(e){
+    if (e.target === modal) closeModal();
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && !modal.hidden) closeModal();
+  });
+})();
