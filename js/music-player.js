@@ -7,9 +7,12 @@
   if (!audio || !player || !toggleBtn) return;
 
   var VOL_STEP = 0.1;
-  var DEFAULT_VOL = 0.25;
+  var DEFAULT_VOL = 0.2;
   var storedVol = parseFloat(localStorage.getItem('musicVolume'));
   audio.volume = isNaN(storedVol) ? DEFAULT_VOL : Math.min(1, Math.max(0, storedVol));
+
+  // false hasta que el usuario pause explícitamente con el botón
+  var userPaused = sessionStorage.getItem('musicPlaying') === '0';
 
   function updateUI(){
     player.classList.toggle('is-playing', !audio.paused);
@@ -21,9 +24,14 @@
     localStorage.setItem('musicVolume', audio.volume.toFixed(2));
   }
 
+  function tryAutoplay(){
+    if (userPaused || !audio.paused) return;
+    audio.play().catch(function(){});
+  }
+
   toggleBtn.addEventListener('click', function(){
-    if (audio.paused) { audio.play().catch(function(){}); }
-    else { audio.pause(); }
+    if (audio.paused) { userPaused = false; audio.play().catch(function(){}); }
+    else { userPaused = true; audio.pause(); }
   });
   if (volDownBtn) volDownBtn.addEventListener('click', function(){ setVolume(audio.volume - VOL_STEP); });
   if (volUpBtn) volUpBtn.addEventListener('click', function(){ setVolume(audio.volume + VOL_STEP); });
@@ -31,10 +39,13 @@
   audio.addEventListener('play', function(){ sessionStorage.setItem('musicPlaying', '1'); updateUI(); });
   audio.addEventListener('pause', function(){ sessionStorage.setItem('musicPlaying', '0'); updateUI(); });
 
-  // si venía sonando en la página anterior, intenta seguir sin pedir otro clic
-  if (sessionStorage.getItem('musicPlaying') === '1') {
-    audio.play().catch(function(){});
-  }
+  // los navegadores bloquean el autoplay con sonido sin gesto del usuario:
+  // se intenta de una vez y, si falla, se reintenta con el primer toque/clic
+  // en la página (a menos que el usuario ya haya pausado antes).
+  tryAutoplay();
+  ['click', 'touchstart', 'keydown'].forEach(function(evt){
+    document.addEventListener(evt, tryAutoplay, { once: true });
+  });
 
   updateUI();
 })();
