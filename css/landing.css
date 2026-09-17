@@ -660,6 +660,27 @@ html{ scroll-behavior:smooth; }
   .detail-list b{ min-width:0; }
 }
 
+/* recepción: por debajo de 840px la columna de texto queda muy
+   angosta para compartir fila con la tarjeta sin deformarla, así que
+   se apila en una sola columna: 1) título (ya va antes del .split),
+   2) tarjeta, 3) información. La tarjeta usa un ancho fijo con
+   height:auto para conservar su proporción 478:573 sin estirarse. */
+@media (max-width:839px){
+  #recepcion .split{
+    grid-template-columns:1fr;
+    align-items:center;
+    gap:2.2rem;
+  }
+  #recepcion .split-media{ order:-1; }
+  #recepcion .split-text{ order:1; }
+  #recepcion .card-plaque{
+    height:auto;
+    width:min(72%, 300px);
+    max-width:min(72%, 300px);
+    margin:0 auto;
+  }
+}
+
 /* ---------- ubicación ---------- */
 .map-card{
   display:grid;
