@@ -391,7 +391,7 @@ html{ scroll-behavior:smooth; }
   color:var(--ink);
 }
 .card-plaque-title--gracias{
-  left:8.87%; top:19.76%;
+  left:8.87%; top:24%;
   color:#fff;
 }
 
@@ -407,12 +407,12 @@ html{ scroll-behavior:smooth; }
   object-fit:contain;
 }
 .gracias-badge .gracias-photo--1{
-  left:0%; top:49.31%; width:52.78%;
+  left:0%; top:49.31%; width:60.7%;
   aspect-ratio:256/310;
   transform:rotate(-18deg); transform-origin:top left;
 }
 .gracias-badge .gracias-photo--2{
-  left:49.28%; top:40.55%; width:51.75%;
+  left:49.28%; top:40.55%; width:59.5%;
   aspect-ratio:251/304;
   transform:rotate(11deg); transform-origin:top left;
 }
