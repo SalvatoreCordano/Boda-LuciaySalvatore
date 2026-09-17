@@ -741,8 +741,6 @@ html{ scroll-behavior:smooth; }
 }
 .cta-btn:hover, .cta-btn:focus-visible{ background:var(--olive-deep); transform:translateY(-1px); }
 .cta-btn svg{ width:1em; height:1em; fill:currentColor; }
-.cta-btn--waze{ background:#33ccff; color:#0a2a3a; }
-.cta-btn--waze:hover, .cta-btn--waze:focus-visible{ background:#1fb8ec; }
 
 @media (max-width:760px){
   .map-card{ grid-template-columns:1fr; }
