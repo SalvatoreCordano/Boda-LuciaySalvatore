@@ -144,6 +144,11 @@
   left:51.69%; top:42.97%; width:20.46%;
   --rot:14deg;
 }
+/* siempre por encima del resto de las tarjetas */
+.card--grupo-1,
+.card--grupo-2{
+  z-index:10;
+}
 .card--grupo-1{
   left:15.14%; top:39.49%; width:19.72%;
   --rot:-14deg;
@@ -162,15 +167,6 @@
   flex-direction:column;
   align-items:center;
   gap:10px;
-}
-
-.credit{
-  text-align:center;
-  font:italic 13px/1.4 Georgia, serif;
-  color:#71755d;
-  letter-spacing:0.02em;
-  pointer-events:none;
-  margin:0;
 }
 
 /* aparece recién cuando termina de revelarse toda la invitación;
