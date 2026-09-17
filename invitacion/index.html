@@ -51,12 +51,13 @@
   <div class="section-inner rsvp reveal">
     <p class="rsvp-thanks">Gracias por todo tu cariño, hoy queremos que estés a nuestro lado en el comienzo de nuestra vida juntos.</p>
 
-    <!-- TODO: "Rodrigo Zimmerman" y "1 pase" son de ejemplo. Falta definir
-         la lógica para personalizar estos datos por invitado. -->
-    <div class="rsvp-guest">
-      <p class="rsvp-guest-name">Rodrigo Zimmerman</p>
+    <!-- Se completa por JS a partir de /invitados.csv, buscando el
+         código que llega en la URL (?inv=CODIGO). Si no hay código o
+         no aparece en el csv, este bloque se queda oculto. -->
+    <div class="rsvp-guest" id="rsvpGuest" hidden>
+      <p class="rsvp-guest-name" id="rsvpGuestName"></p>
       <p class="rsvp-guest-label">Hemos reservado</p>
-      <p class="rsvp-guest-passes">1 pase</p>
+      <p class="rsvp-guest-passes" id="rsvpGuestPasses"></p>
     </div>
 
     <div class="divider"></div>
@@ -235,7 +236,7 @@
 
 <p class="foot">Lucía &amp; Salvatore — 28 de noviembre, 2026</p>
 
-<script src="/js/landing.js?v=4"></script>
+<script src="/js/landing.js?v=5"></script>
 
 </body>
 </html>

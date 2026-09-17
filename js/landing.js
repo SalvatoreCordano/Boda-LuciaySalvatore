@@ -40,6 +40,56 @@
 })();
 
 (function(){
+  var guestBlock = document.getElementById('rsvpGuest');
+  var nameEl = document.getElementById('rsvpGuestName');
+  var passesEl = document.getElementById('rsvpGuestPasses');
+  if (!guestBlock) return;
+
+  var code = new URLSearchParams(location.search).get('inv');
+  if (!code) return;
+  code = code.trim().toLowerCase();
+
+  function parseCsvLine(line){
+    var cells = [];
+    var cur = '';
+    var inQuotes = false;
+    for (var i = 0; i < line.length; i++){
+      var ch = line[i];
+      if (inQuotes) {
+        if (ch === '"' && line[i + 1] === '"') { cur += '"'; i++; }
+        else if (ch === '"') { inQuotes = false; }
+        else { cur += ch; }
+      } else {
+        if (ch === '"') { inQuotes = true; }
+        else if (ch === ',') { cells.push(cur); cur = ''; }
+        else { cur += ch; }
+      }
+    }
+    cells.push(cur);
+    return cells;
+  }
+
+  fetch('/invitados.csv', { cache: 'no-store' })
+    .then(function(res){ return res.ok ? res.text() : ''; })
+    .then(function(text){
+      var rows = text.split(/\r?\n/).filter(function(r){ return r.trim().length; });
+      for (var i = 1; i < rows.length; i++) {
+        var cols = parseCsvLine(rows[i]);
+        var rowCode = (cols[0] || '').trim().toLowerCase();
+        if (rowCode === code) {
+          var name = (cols[1] || '').trim();
+          var passes = parseInt(cols[2], 10) || 1;
+          nameEl.textContent = name;
+          passesEl.textContent = passes + (passes === 1 ? ' pase' : ' pases');
+          guestBlock.hidden = false;
+          return;
+        }
+      }
+    })
+    .catch(function(){});
+})();
+
+(function(){
   var lightbox = document.getElementById('lightbox');
   var lightboxImg = document.getElementById('lightboxImg');
   var closeBtn = document.getElementById('lightboxClose');
