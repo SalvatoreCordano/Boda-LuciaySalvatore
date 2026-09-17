@@ -438,15 +438,11 @@ html{ scroll-behavior:smooth; }
 }
 .bank-entry{
   display:flex;
-  flex-direction:column;
+  flex-direction:row;
   align-items:center;
-  gap:.4rem;
-}
-.bank-entry-label{
-  font-size:.68rem;
-  letter-spacing:.28em;
-  text-transform:uppercase;
-  color:var(--olive);
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:.7rem;
 }
 .bank-entry-number{
   margin:0;

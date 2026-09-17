@@ -60,7 +60,7 @@
     var originalText = label ? label.textContent : 'Copiar';
 
     btn.addEventListener('click', function(){
-      var value = btn.getAttribute('data-copy');
+      var value = (btn.getAttribute('data-copy') || '').replace(/-/g, '');
       var done = function(){
         btn.classList.add('is-copied');
         if (label) label.textContent = ' Copiado';
