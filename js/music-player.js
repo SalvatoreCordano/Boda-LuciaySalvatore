@@ -7,8 +7,9 @@
   if (!audio || !player || !toggleBtn) return;
 
   var VOL_STEP = 0.1;
-  var DEFAULT_VOL = 0.2;
-  var storedVol = parseFloat(localStorage.getItem('musicVolume'));
+  var DEFAULT_VOL = 0.15;
+  var VOL_KEY = 'musicVolume_v2'; // versionado para no heredar un volumen alto guardado antes
+  var storedVol = parseFloat(localStorage.getItem(VOL_KEY));
   audio.volume = isNaN(storedVol) ? DEFAULT_VOL : Math.min(1, Math.max(0, storedVol));
 
   // false hasta que el usuario pause explícitamente con el botón
@@ -21,7 +22,7 @@
 
   function setVolume(v){
     audio.volume = Math.min(1, Math.max(0, v));
-    localStorage.setItem('musicVolume', audio.volume.toFixed(2));
+    localStorage.setItem(VOL_KEY, audio.volume.toFixed(2));
   }
 
   function tryAutoplay(){
