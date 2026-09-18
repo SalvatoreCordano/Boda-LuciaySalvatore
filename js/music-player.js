@@ -41,7 +41,11 @@
 
   // los navegadores bloquean el autoplay con sonido sin gesto del usuario:
   // se intenta de una vez y, si falla, se reintenta con el primer toque/clic
-  // en la página (a menos que el usuario ya haya pausado antes).
+  // en la página (a menos que el usuario ya haya pausado antes). El clic en
+  // el sello de lacre (abrir el sobre) es el gesto más confiable para esto.
+  var sealBtn = document.getElementById('sealBtn');
+  if (sealBtn) sealBtn.addEventListener('click', tryAutoplay);
+
   tryAutoplay();
   ['click', 'touchstart', 'keydown'].forEach(function(evt){
     document.addEventListener(evt, tryAutoplay, { once: true });
