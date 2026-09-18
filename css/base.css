@@ -76,3 +76,17 @@ a{ color:inherit; }
 .music-toggle .icon-pause{ display:none; }
 .music-player.is-playing .icon-play{ display:none; }
 .music-player.is-playing .icon-pause{ display:flex; }
+
+@media (max-width:700px){
+  .music-player{
+    left:auto;
+    right:10px;
+    bottom:auto;
+    top:50%;
+    transform:translateY(-50%);
+    flex-direction:column;
+    border-radius:24px;
+    padding:8px 6px;
+    gap:8px;
+  }
+}
