@@ -67,6 +67,8 @@ li input:checked::after { content: ""; width: 6px; height: 11px; border: solid v
 li.done .t { text-decoration: line-through; color: var(--muted); }
 .tag { display: inline-block; font-size: .72rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--urgent); background: var(--urgent-soft); border-radius: 99px; padding: 1px 8px; margin-left: 6px; vertical-align: 1px; }
 .status { font-size: .85rem; color: var(--muted); }
+.who { display: inline-block; font-size: .78rem; font-weight: 600; color: var(--accent); background: var(--accent-soft); border-radius: 99px; padding: 1px 9px; margin-top: 4px; }
+.filter { font: inherit; padding: 10px 12px; border-radius: 99px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); }
 .empty { color: var(--muted); padding: 12px 0; }
 @media (prefers-reduced-motion: reduce) { .bar > i { transition: none; } }
 </style>
@@ -85,6 +87,10 @@ li.done .t { text-decoration: line-through; color: var(--muted); }
   <div class="tabs" role="tablist">
     <button class="tab" role="tab" id="tab-pend" aria-selected="true" data-tab="pend">Pendientes</button>
     <button class="tab" role="tab" id="tab-shop" aria-selected="false" data-tab="shop">Compras</button>
+    <select class="filter" id="who" aria-label="Filtrar por responsable">
+      <option value="">Todos los responsables</option>
+      <option>Lucía</option><option>Salvatore</option><option>Janet</option><option>Fernando</option><option>Soraya</option>
+    </select>
     <button class="toggle" id="onlyOpen" aria-pressed="false">Solo lo que falta</button>
   </div>
 
@@ -94,12 +100,15 @@ li.done .t { text-decoration: line-through; color: var(--muted); }
 <script>
 var GROUPS = [
   { tab: "pend", title: "Diseños y cuadros", items: [
-    { id: "fotos-cuadros", text: "Seleccionar 2 fotografías para los cuadros", urgent: true },
-    { id: "diseno-bebidas", text: "Diseño de las bebidas (cuadro)", urgent: true },
-    { id: "diseno-ninos", text: "Diseño de Salvatore con fotos de niños de ambos (cuadro)", urgent: true },
-    { id: "fotos-removedores", text: "Imprimir fotos de los removedores", note: "Se pegan con silicona" },
-    { id: "stickers", text: "Diseño de stickers, imprimirlos y pegarlos en los vasos" },
-    { id: "refs-ricardo", text: "Compartirle a Ricardo las referencias de fotografías" }
+    { id: "fotos-cuadros", text: "Seleccionar 2 fotografías para los cuadros", urgent: true, who: ["Lucía"] },
+    { id: "imprimir-fotos-cuadros", text: "Imprimir las fotografías para los cuadros", urgent: true, who: ["Lucía"] },
+    { id: "diseno-bebidas", text: "Diseño de las bebidas (cuadro)", urgent: true, who: ["Lucía"] },
+    { id: "diseno-ninos", text: "Diseño de cuadro especial con fotos de niños", urgent: true, who: ["Salvatore"] },
+    { id: "fotos-removedores", text: "Imprimir caras de los removedores", note: "Se pegan con silicona", who: ["Lucía"] },
+    { id: "stickers", text: "Diseño de los stickers", who: ["Salvatore"] },
+    { id: "imprimir-stickers", text: "Imprimir los stickers", who: ["Janet", "Lucía"] },
+    { id: "pegar-stickers", text: "Pegar los stickers en los vasos", who: ["Todos"] },
+    { id: "refs-ricardo", text: "Compartirle a Ricardo las referencias de fotografías", who: ["Lucía"] }
   ]},
   { tab: "pend", title: "Decoración", items: [
     { id: "velas", text: "Velas", done: true },
@@ -108,23 +117,23 @@ var GROUPS = [
     { id: "velas-bano", text: "Velas para el baño", done: true },
     { id: "toalla-bano", text: "Toalla para el baño", done: true },
     { id: "jarras", text: "Jarras", done: true },
-    { id: "tapa-bano", text: "Cambiar la tapa del baño" },
-    { id: "luz-led", text: "Instalar la luz LED" }
+    { id: "tapa-bano", text: "Cambiar la tapa del baño", who: ["Fernando"] },
+    { id: "luz-led", text: "Instalar la luz LED", who: ["Fernando"] }
   ]},
   { tab: "pend", title: "Flores", items: [
-    { id: "flores-mesa", text: "Arreglo para la mesa" },
-    { id: "flores-barra", text: "Arreglo para la barra" },
-    { id: "flores-sala", text: "Arreglo pequeño para la mesa al lado de la sala" },
-    { id: "flores-fotos", text: "Arreglo pequeño para la zona de fotografías" }
+    { id: "flores-mesa", text: "Arreglo para la mesa", who: ["Janet", "Lucía"] },
+    { id: "flores-barra", text: "Arreglo para la barra", who: ["Janet", "Lucía"] },
+    { id: "flores-sala", text: "Arreglo pequeño para la mesa al lado de la sala", who: ["Janet", "Lucía"] },
+    { id: "flores-fotos", text: "Arreglo pequeño para la zona de fotografías", who: ["Janet", "Lucía"] }
   ]},
   { tab: "pend", title: "Comida y logística", items: [
-    { id: "torta", text: "Torta" },
+    { id: "torta", text: "Torta", who: ["Soraya"] },
     { id: "pedido-nuez", text: "Pedido de la nuez", done: true },
-    { id: "recoger-nuez", text: "Recoger el pedido de la nuez", note: "Viernes a las 10 a.m." },
-    { id: "lista-soraya", text: "Lista de ingredientes del pay de limón y el brownie para la tía Soraya" },
-    { id: "aros", text: "Recoger los aros en el centro de Lima", urgent: true },
-    { id: "invitacion-esper", text: "Enviar invitación al tío Esper" },
-    { id: "maquina-omar", text: "Confirmar si se usa la máquina de café del tío Omar", note: "Define cómo armamos la barra de café" }
+    { id: "recoger-nuez", text: "Recoger el pedido de la nuez", note: "Viernes a las 10 a.m.", who: ["Fernando"] },
+    { id: "lista-soraya", text: "Lista de ingredientes del pay de limón y el brownie para la tía Soraya", who: ["Lucía", "Soraya"] },
+    { id: "aros", text: "Recoger los aros en el centro de Lima", urgent: true, who: ["Salvatore"] },
+    { id: "invitacion-esper", text: "Enviar invitación al tío Esper", who: ["Lucía"] },
+    { id: "maquina-omar", text: "Confirmar si se usa la máquina de café del tío Omar", note: "Define cómo armamos la barra de café", who: ["Janet", "Lucía"] }
   ]},
   { tab: "shop", title: "Bebidas", items: [
     { id: "c-inca", text: "Inca Kola" },
@@ -159,7 +168,7 @@ var GROUPS = [
 ];
 
 var state = {};      // id -> bool, sobrescribe el valor inicial
-var tab = "pend", onlyOpen = false, db = null, canWrite = true;
+var tab = "pend", onlyOpen = false, whoFilter = "", db = null, canWrite = true;
 var LS = "boda-civil-checks";
 
 function lsGet() { try { return JSON.parse(localStorage.getItem(LS) || "{}"); } catch (e) { return {}; } }
@@ -177,7 +186,11 @@ function render() {
   root.textContent = "";
   var shown = 0;
   GROUPS.filter(function (g) { return g.tab === tab; }).forEach(function (g) {
-    var items = g.items.filter(function (it) { return !(onlyOpen && isDone(it)); });
+    var items = g.items.filter(function (it) {
+      if (onlyOpen && isDone(it)) return false;
+      if (whoFilter && !(it.who && (it.who.indexOf(whoFilter) >= 0 || it.who.indexOf("Todos") >= 0))) return false;
+      return true;
+    });
     if (!items.length) return;
     shown += items.length;
     var sec = document.createElement("section");
@@ -211,6 +224,12 @@ function render() {
         var n = document.createElement("span");
         n.className = "note"; n.textContent = it.note;
         tx.appendChild(n);
+      }
+      if (it.who) {
+        var w = document.createElement("span");
+        w.className = "who"; w.textContent = it.who.join(" y ");
+        var br = document.createElement("br");
+        tx.appendChild(br); tx.appendChild(w);
       }
       lab.appendChild(cb); lab.appendChild(tx);
       li.appendChild(lab); ul.appendChild(li);
@@ -248,6 +267,7 @@ document.querySelectorAll(".tab").forEach(function (b) {
     render();
   });
 });
+document.getElementById("who").addEventListener("change", function () { whoFilter = this.value; render(); });
 document.getElementById("onlyOpen").addEventListener("click", function () {
   onlyOpen = !onlyOpen;
   this.setAttribute("aria-pressed", String(onlyOpen));
