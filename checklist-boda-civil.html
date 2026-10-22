@@ -1,0 +1,277 @@
+<title>Checklist Boda Civil</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: una columna angosta tipo lista de mano, resumen arriba, pestañas Pendientes / Compras */
+:root {
+  --bg: #f6f7f4;
+  --surface: #ffffff;
+  --fg: #1c2a26;
+  --muted: #5d6b66;
+  --line: #dde3df;
+  --accent: #1f6f5c;
+  --accent-soft: #e0efe9;
+  --urgent: #b4531a;
+  --urgent-soft: #f8e7da;
+  --font-display: "Bricolage Grotesque", "Trebuchet MS", sans-serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121a17; --surface: #1a2420; --fg: #e8efeb; --muted: #94a39c; --line: #2b3a34;
+    --accent: #4fb79b; --accent-soft: #1d3a31; --urgent: #f0a272; --urgent-soft: #3a261a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121a17; --surface: #1a2420; --fg: #e8efeb; --muted: #94a39c; --line: #2b3a34;
+  --accent: #4fb79b; --accent-soft: #1d3a31; --urgent: #f0a272; --urgent-soft: #3a261a;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.45;
+  padding-block: 24px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+main { max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+h1 { font-family: var(--font-display); font-size: 2rem; line-height: 1.1; margin: 0; text-wrap: balance; }
+.sub { color: var(--muted); margin: 4px 0 0; }
+.summary { display: flex; flex-direction: column; gap: 8px; }
+.bar { height: 10px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .25s; }
+.count { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: .9rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.tab, .toggle {
+  font: inherit; font-weight: 600; padding: 10px 16px; border-radius: 99px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--surface); color: var(--fg);
+}
+.tab[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.toggle { margin-left: auto; font-weight: 500; color: var(--muted); }
+.toggle[aria-pressed="true"] { background: var(--accent-soft); color: var(--fg); border-color: var(--accent); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+section { display: flex; flex-direction: column; gap: 8px; }
+h2 { font-family: var(--font-display); font-size: 1.1rem; margin: 12px 0 0; display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+h2 span { font-family: var(--font-body); font-size: .85rem; font-weight: 500; color: var(--muted); font-variant-numeric: tabular-nums; }
+ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+li label {
+  display: flex; gap: 12px; align-items: flex-start; min-width: 0;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; cursor: pointer;
+}
+li input { appearance: none; flex: none; width: 22px; height: 22px; margin: 1px 0 0; border: 2px solid var(--muted); border-radius: 6px; background: var(--surface); cursor: pointer; display: grid; place-content: center; }
+li input:checked { background: var(--accent); border-color: var(--accent); }
+li input:checked::after { content: ""; width: 6px; height: 11px; border: solid var(--bg); border-width: 0 2.5px 2.5px 0; transform: rotate(45deg) translate(-1px, -1px); }
+.txt { min-width: 0; overflow-wrap: anywhere; }
+.note { display: block; font-size: .85rem; color: var(--muted); }
+li.done .t { text-decoration: line-through; color: var(--muted); }
+.tag { display: inline-block; font-size: .72rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--urgent); background: var(--urgent-soft); border-radius: 99px; padding: 1px 8px; margin-left: 6px; vertical-align: 1px; }
+.status { font-size: .85rem; color: var(--muted); }
+.empty { color: var(--muted); padding: 12px 0; }
+@media (prefers-reduced-motion: reduce) { .bar > i { transition: none; } }
+</style>
+
+<main>
+  <header>
+    <h1>Boda civil, viernes</h1>
+    <p class="sub">Marca lo que ya está listo. Se actualiza para todos.</p>
+  </header>
+
+  <div class="summary" aria-live="polite">
+    <div class="bar"><i id="fill"></i></div>
+    <div class="count"><span id="doneCount"></span><span id="status" class="status"></span></div>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tab-pend" aria-selected="true" data-tab="pend">Pendientes</button>
+    <button class="tab" role="tab" id="tab-shop" aria-selected="false" data-tab="shop">Compras</button>
+    <button class="toggle" id="onlyOpen" aria-pressed="false">Solo lo que falta</button>
+  </div>
+
+  <div id="list"></div>
+</main>
+
+<script>
+var GROUPS = [
+  { tab: "pend", title: "Diseños y cuadros", items: [
+    { id: "fotos-cuadros", text: "Seleccionar 2 fotografías para los cuadros", urgent: true },
+    { id: "diseno-bebidas", text: "Diseño de las bebidas (cuadro)", urgent: true },
+    { id: "diseno-ninos", text: "Diseño de Salvatore con fotos de niños de ambos (cuadro)", urgent: true },
+    { id: "fotos-removedores", text: "Imprimir fotos de los removedores", note: "Se pegan con silicona" },
+    { id: "stickers", text: "Diseño de stickers, imprimirlos y pegarlos en los vasos" },
+    { id: "refs-ricardo", text: "Compartirle a Ricardo las referencias de fotografías" }
+  ]},
+  { tab: "pend", title: "Decoración", items: [
+    { id: "velas", text: "Velas", done: true },
+    { id: "tela", text: "Tela", done: true },
+    { id: "aromatizadores", text: "Aromatizadores", done: true },
+    { id: "velas-bano", text: "Velas para el baño", done: true },
+    { id: "toalla-bano", text: "Toalla para el baño", done: true },
+    { id: "jarras", text: "Jarras", done: true },
+    { id: "tapa-bano", text: "Cambiar la tapa del baño" },
+    { id: "luz-led", text: "Instalar la luz LED" }
+  ]},
+  { tab: "pend", title: "Flores", items: [
+    { id: "flores-mesa", text: "Arreglo para la mesa" },
+    { id: "flores-barra", text: "Arreglo para la barra" },
+    { id: "flores-sala", text: "Arreglo pequeño para la mesa al lado de la sala" },
+    { id: "flores-fotos", text: "Arreglo pequeño para la zona de fotografías" }
+  ]},
+  { tab: "pend", title: "Comida y logística", items: [
+    { id: "torta", text: "Torta" },
+    { id: "pedido-nuez", text: "Pedido de la nuez", done: true },
+    { id: "lista-soraya", text: "Lista de ingredientes del pay de limón y el brownie para la tía Soraya" },
+    { id: "aros", text: "Recoger los aros en el centro de Lima", urgent: true },
+    { id: "invitacion-esper", text: "Enviar invitación al tío Esper" },
+    { id: "maquina-omar", text: "Confirmar si se usa la máquina de café del tío Omar", note: "Define cómo armamos la barra de café" }
+  ]},
+  { tab: "shop", title: "Bebidas", items: [
+    { id: "c-inca", text: "Inca Kola" },
+    { id: "c-coca", text: "Coca-Cola" },
+    { id: "c-sprite", text: "Sprite" },
+    { id: "c-jamaica", text: "Jamaica" },
+    { id: "c-durazno", text: "Durazno" },
+    { id: "c-icedtea", text: "Iced tea (o similar)" },
+    { id: "c-hielo", text: "Hielo" }
+  ]},
+  { tab: "shop", title: "Barra de café", items: [
+    { id: "c-leche", text: "Leche" },
+    { id: "c-chocolate", text: "Chocolate", note: "Para cafés con chocolate" },
+    { id: "c-cafe", text: "Café", note: "Falta definir cómo se hace el café derretido y si va la máquina del tío Omar" }
+  ]},
+  { tab: "shop", title: "Para decorar las bebidas", items: [
+    { id: "c-arandanos", text: "Arándanos" },
+    { id: "c-fresas", text: "Fresas" },
+    { id: "c-mondadientes", text: "Mondadientes" }
+  ]},
+  { tab: "shop", title: "Sanguchitos", items: [
+    { id: "c-pollo", text: "Pollo" },
+    { id: "c-mayo", text: "Mayonesa" },
+    { id: "c-jamon", text: "Jamón del país" },
+    { id: "c-cebolla", text: "Cebolla para la salsa" },
+    { id: "c-asado", text: "Asado de la tía de Salvatore", note: "Coordinar" }
+  ]},
+  { tab: "shop", title: "Postres de la tía Soraya", items: [
+    { id: "c-pay", text: "Ingredientes del pay de limón" },
+    { id: "c-brownie", text: "Ingredientes del brownie" }
+  ]}
+];
+
+var state = {};      // id -> bool, sobrescribe el valor inicial
+var tab = "pend", onlyOpen = false, db = null, canWrite = true;
+var LS = "boda-civil-checks";
+
+function lsGet() { try { return JSON.parse(localStorage.getItem(LS) || "{}"); } catch (e) { return {}; } }
+function lsSet() { try { localStorage.setItem(LS, JSON.stringify(state)); } catch (e) {} }
+
+function isDone(it) { return it.id in state ? state[it.id] : !!it.done; }
+
+function render() {
+  var all = [], doneN = 0;
+  GROUPS.forEach(function (g) { g.items.forEach(function (it) { all.push(it); if (isDone(it)) doneN++; }); });
+  document.getElementById("fill").style.width = (all.length ? doneN / all.length * 100 : 0) + "%";
+  document.getElementById("doneCount").textContent = doneN + " de " + all.length + " listos";
+
+  var root = document.getElementById("list");
+  root.textContent = "";
+  var shown = 0;
+  GROUPS.filter(function (g) { return g.tab === tab; }).forEach(function (g) {
+    var items = g.items.filter(function (it) { return !(onlyOpen && isDone(it)); });
+    if (!items.length) return;
+    shown += items.length;
+    var sec = document.createElement("section");
+    var h = document.createElement("h2");
+    var d = g.items.filter(isDone).length;
+    h.textContent = g.title;
+    var sp = document.createElement("span");
+    sp.textContent = d + "/" + g.items.length;
+    h.appendChild(sp);
+    sec.appendChild(h);
+    var ul = document.createElement("ul");
+    items.forEach(function (it) {
+      var li = document.createElement("li");
+      var on = isDone(it);
+      if (on) li.className = "done";
+      var lab = document.createElement("label");
+      var cb = document.createElement("input");
+      cb.type = "checkbox"; cb.checked = on; cb.id = "cb-" + it.id;
+      cb.addEventListener("change", function () { toggle(it.id, cb.checked); });
+      var tx = document.createElement("span");
+      tx.className = "txt";
+      var t = document.createElement("span");
+      t.className = "t"; t.textContent = it.text;
+      tx.appendChild(t);
+      if (it.urgent && !on) {
+        var tg = document.createElement("span");
+        tg.className = "tag"; tg.textContent = "Hoy";
+        tx.appendChild(tg);
+      }
+      if (it.note) {
+        var n = document.createElement("span");
+        n.className = "note"; n.textContent = it.note;
+        tx.appendChild(n);
+      }
+      lab.appendChild(cb); lab.appendChild(tx);
+      li.appendChild(lab); ul.appendChild(li);
+    });
+    sec.appendChild(ul);
+    root.appendChild(sec);
+  });
+  if (!shown) {
+    var e = document.createElement("p");
+    e.className = "empty"; e.textContent = "Todo listo en esta pestaña.";
+    root.appendChild(e);
+  }
+}
+
+function setStatus() {
+  var s = document.getElementById("status");
+  s.textContent = db ? (canWrite ? "Compartido en vivo" : "Solo lectura") : "Solo en este dispositivo";
+}
+
+function toggle(id, val) {
+  state[id] = val;
+  lsSet();
+  render();
+  if (db && canWrite) {
+    db.collection("checks").doc(id).set({ done: val }).catch(function (e) {
+      if (e && e.code === "invalid_argument") { canWrite = false; setStatus(); }
+    });
+  }
+}
+
+document.querySelectorAll(".tab").forEach(function (b) {
+  b.addEventListener("click", function () {
+    tab = b.getAttribute("data-tab");
+    document.querySelectorAll(".tab").forEach(function (x) { x.setAttribute("aria-selected", String(x === b)); });
+    render();
+  });
+});
+document.getElementById("onlyOpen").addEventListener("click", function () {
+  onlyOpen = !onlyOpen;
+  this.setAttribute("aria-pressed", String(onlyOpen));
+  render();
+});
+
+state = lsGet();
+render();
+setStatus();
+
+(async function () {
+  try {
+    var d = window.claude && await window.claude.use("db");
+    if (!d) return;
+    db = d;
+    var user = await window.claude.use("user");
+    if (user) { var w = user.can("data.write"); if (w === false) canWrite = false; }
+    state = {};
+    db.collection("checks").onSnapshot(function (snap) {
+      var next = {};
+      snap.docs.forEach(function (doc) { var v = doc.data(); if (v) next[doc.id] = !!v.done; });
+      state = next;
+      render();
+    }, function () { db = null; state = lsGet(); render(); setStatus(); });
+    setStatus();
+  } catch (e) { db = null; setStatus(); }
+})();
+</script>
